@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getVacancy.css">
+</head>
+<body>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" >
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/candidate/candidatePage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+
+<div class="container">
+    <table>
+        <tr><td th:text="'Позиция: '+${vacancy.getPosition().toString()}"></td></tr>
+        <tr><td th:text="'Количество свободных мест: '+${vacancy.freePositions}"></td></tr>
+        <div th:switch="${vacancy.getTrialEntities().isEmpty()}">
+            <tr th:case="true">
+                <td style="text-decoration-line: underline;text-decoration-color:lawngreen;">Количество человек, рассматривающих вакансию: 0</td>
+            </tr>
+            <tr th:case="*">
+                <div th:if="${vacancy.getTrialEntities().size() <= vacancy.freePositions}">
+                    <td style="text-decoration-line: underline;text-decoration-color:lawngreen;" th:text="'Количество человек, рассматривающих вакансию: '+${vacancy.getTrialEntities().size()}"></td>
+                </div>
+                <div th:unless="${vacancy.getTrialEntities().size() <= vacancy.freePositions}">
+                    <td style="text-decoration-line: underline;text-decoration-color:#ff3232;" th:text="'Количество человек, рассматривающих вакансию: '+${employee.cityCompany.nameCity}"></td>
+                </div>
+            </tr>
+
+        </div>
+        <tr>
+            <td th:text="'Филиал компании: '+${vacancy.cityCompany.nameCity}"></td>
+        </tr>
+        <tr>
+            <td th:text="'Необходимый опыт работы: '+${vacancy.background.experience}"></td>
+        </tr>
+        <tr>
+            <td th:text="'Уровень английского языка: '+${vacancy.getLanguages().get(0).toString()}"></td>
+        </tr>
+
+        <tr>
+            <td >Необходимые навыки</td>
+        </tr>
+        <div th:switch="${vacancy.background.skills.isEmpty()}">
+            <tr th:case="true"><td>-</td></tr>
+            <tr th:case="*" th:each="skill:${vacancy.background.skills}"><td th:text="*{skill.nameSkill}"></td></tr>
+        </div>
+        <tr>
+            <td th:text="'HR-специалист: '+${vacancy.getHr().getUserDetail().getSNP()}"></td>
+        </tr>
+        <tr>
+            <td th:text="'Контакты HR-специалиста: '+${vacancy.getHr().getUserDetail().getEmail()}"></td>
+        </tr>
+    </table>
+    <h1>РЕЗУЛЬТАТЫ ПРОХОЖДЕНИЯ</h1>
+    <table class="table">
+        <thead>
+            <th>Статус</th>
+            <th>Техническое тестирование</th>
+            <div th:unless="${trial.getResultTesting().getPositionTest().getResult().getPoints()==-1}">
+                <th></th>
+            </div>
+            <th>Тестирование иностранного языка</th>
+            <div th:unless="${trial.getResultTesting().getLanguageTestEntities().get(0).getResult().getPoints()==-1}">
+                <th></th>
+            </div>
+            <th>Собеседование</th>
+            <div th:unless="${trial.getInterviewEntities().isEmpty()}">
+                <div th:unless="${trial.getInterviewEntities().get(0).getResult().getPoints()==-1}">
+                    <th></th>
+                </div>
+            </div>
+        </thead>
+        <tr>
+            <td th:text="${trial.getStatus()}"></td>
+            <div th:if="${trial.getResultTesting().getPositionTest().getResult().getPoints()==-1}">
+                <td><a th:href="@{/candidate/positionTest}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+            </div>
+            <div th:unless="${trial.getResultTesting().getPositionTest().getResult().getPoints()==-1}">
+                <td  th:text="${trial.getResultTesting().getPositionTest().getResult().getPoints()}+'%'"></td>
+                <td><a th:href="@{/candidate/positionTest}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+            </div>
+            <div th:if="${trial.getResultTesting().getLanguageTestEntities().get(0).getResult().getPoints()==-1}">
+                <td><a th:href="@{/candidate/languageTest}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+            </div>
+            <div th:unless="${trial.getResultTesting().getLanguageTestEntities().get(0).getResult().getPoints()==-1}">
+                <td  th:text="${trial.getResultTesting().getLanguageTestEntities().get(0).getResult().getPoints()}+'%'"></td>
+                <td><a th:href="@{/candidate/languageTest}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+            </div>
+            <div th:if="${trial.getInterviewEntities().isEmpty()}">
+                <td>Не назначено</td>
+            </div>
+            <div th:unless="${trial.getInterviewEntities().isEmpty()}">
+                <div th:if="${trial.getInterviewEntities().get(0).getResult().getPoints()==-1}">
+                    <td><a th:href="@{/candidate/interview}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+                </div>
+                <div th:unless="${trial.getInterviewEntities().get(0).getResult().getPoints()==-1}">
+                    <td th:text="${trial.getInterviewEntities().get(0).getResult().getPoints()}"></td>
+                    <td><a th:href="@{/candidate/interview}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+                </div>
+            </div>
+        </tr>
+    </table>
+    <a th:href="@{/candidate/candidatePage}">
+        <button>
+            Назад
+        </button>
+    </a>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        *{
+            font-family: "Tahoma";
+            font-weight: bold;
+        }
+        progress {
+            border-radius: 7px;
+            width: 50%;
+            height: 15px;
+            box-shadow: 1px 1px 4px rgba( 0, 0, 0, 0.2 );
+        }
+        progress::-webkit-progress-bar {
+            background-color: rgb(84,84,84);
+            border-radius: 7px;
+        }
+        progress::-webkit-progress-value {
+            background-color: #E1FD5B;
+            border-radius: 7px;
+        }
+        .result{
+            min-width: 1460px;
+            min-height: 748px;
+            display: flex;
+            flex-direction: row;
+        }
+        .image{
+            min-height: 748px;
+            min-width: 230px;
+            background-image: url("/photos/фон (1).png");
+        }
+        #test{
+            min-height: 748px;
+            min-width: 1000px;
+        }
+        .footer{
+            font-size: medium;
+            display: flex;
+            color: #171717;
+            flex-direction: row;
+            align-items: center;
+            background-color: white;
+            min-height:50px;
+            min-width: 1460px;
+        }
+</style>
+</head>
+<body>
+<div class="result">
+    <div class="image"></div>
+    <div id="test">
+        <img th:src="@{/photos/2.png}" width="100px" height="100px">
+        <progress id="user-progress" value="0" max="100"></progress>
+        <form method="post"
+              role="form"
+              th:action="@{/candidate/endPositionTest}"
+              th:object="${answer}"
+              enctype="multipart/form-data"
+              id="form"
+        >
+            <div th:each="item, iStat:${test}" th:class="${iStat.even}? 'even_css_class':'odd_css_class'">
+                <div th:text="${iStat.index+1+' '+item.question}"></div>
+                <input hidden th:field="*{answerList[__${iStat.index}__].idQuestion}">
+                <input hidden th:field="*{answerList[__${iStat.index}__].rightAnswer}">
+                <div th:each="answer, iStat1:${item.answers}" th:class="${iStat1.even}? 'even_css_class':'odd_css_class'" >
+                    <input th:id="${iStat.index+1}+'.'+${iStat1.index+1}" type="radio" th:name="'name'+${iStat.index+1}" th:value="${answer}" th:field="*{answerList[__${iStat.index}__].answer}">
+                    <label th:for="${iStat.index+1}+'.'+${iStat1.index+1}" th:text="${answer}"></label>
+                </div>
+            </div>
+            <button id="submitButton" type="submit">Отправить</button>
+        </form>
+        <script>
+            function userProgress(time){
+                var start=0;
+                var time=Math.round(time*1000/100);
+                var progressElement=document.getElementById("user-progress");
+                var intervalId=setInterval(function (){
+                    if(start>=100){
+                        clearInterval(intervalId);
+                        document.getElementById("form").submit();
+                    }
+                    else{
+                        progressElement.value=start;
+                    }
+                    start++;
+                },time);
+
+            }
+
+            userProgress(320);
+        </script>
+    </div>
+    <div class="image"></div>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>

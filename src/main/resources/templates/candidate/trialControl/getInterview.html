@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getVacancy.css">
+</head>
+<body>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" >
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/candidate/candidatePage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717;  text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <table>
+        <tr><td style="text-align: center" colspan="3">ИНТЕРВЬЮ</td></tr>
+        <tr>
+            <td>Сотрудник</td>
+            <td th:text="${employee.getUserDetail().getSNP()}"></td>
+            <td><a th:href="@{/candidate/getEmployeeProfile/{idUser}(idUser=${employee.userDetail.idUserDetails})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+        </tr>
+
+        <tr>
+            <td>Дата</td>
+            <td colspan="2" th:text="${interview.getDateAndTime()}"></td>
+        </tr>
+        <div th:if="${trueInterview}">
+            <tr><td style="text-align: center" colspan="3">РЕЗУЛЬТАТ</td></tr>
+            <tr>
+                <td>Балл</td>
+                <td colspan="2" th:text="${interview.getResult().getPoints()}"></td>
+            </tr>
+            <tr>
+                <td>Отзыв</td>
+                <td colspan="2" th:text="${interview.getResult().getFeedback()}"></td>
+            </tr>
+        </div>
+        <div th:unless="${trueInterview}">
+            <tr>
+                <td>Ссылка на конференцию</td>
+                <td colspan="2"><a th:href="@{${interview.getReference()}}" target="_blank">
+                    <button>Конференция</button>
+                </a></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: center">Собеседование еще не завершено</td>
+            </tr>
+        </div>
+    </table>
+    <a onclick="history.go(-1)">
+        <button>
+            Назад
+        </button>
+    </a>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

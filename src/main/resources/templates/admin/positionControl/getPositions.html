@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .modalframe{
+            top: -100%;
+            right: 0;
+            left: 50%;
+            font-size: 14px;
+            z-index: 20;
+            margin: 0;
+            width: 85%;
+            min-width: 320px;
+            max-width: 600px;
+            /* фиксированное позиционирование, окно стабильно при прокрутке */
+            position: fixed;
+            padding: 15px;
+            border: 1px solid #383838;
+            background: #fefefe;
+            /* скругление углов */
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            -ms-border-radius: 4px;
+            border-radius: 4px;
+            font: 14px/18px 'Tahoma', Arial, sans-serif;
+            /* внешняя тень */
+            -webkit-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+            -moz-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+            -ms-box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+            box-shadow: 0 15px 20px rgba(0,0,0,.22),0 19px 60px rgba(0,0,0,.3);
+            -webkit-transform: translate(-50%, 0);
+            -ms-transform: translate(-50%, 0);
+            -o-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
+            top: 20%;
+            -webkit-transition: -webkit-transform 0.6s ease-out;
+            -moz-transition: -moz-transform 0.6s ease-out;
+            -o-transition: -o-transform 0.6s ease-out;
+            transition: transform 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+<div th:if="${add}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/addPosition/end}"
+                th:object="${position}"
+                enctype="multipart/form-data"
+        >
+            <h1>Должность</h1>
+            <div class="field">
+                <label for="name">Добавление должности</label>
+                <input
+                        id="name"
+                        name="name"
+                        placeholder="Введите название должности"
+                        th:field="*{name}"
+                        type="text"
+
+                />
+                <p th:errors = "*{name}"
+                   th:if="${#fields.hasErrors('name')}">
+                </p>
+                <p th:if="${fail}">
+                    Такая должность уже существует!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Добавить должность</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/positions}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div th:if="${delete}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/deletePosition/end}"
+                th:object="${position}"
+                enctype="multipart/form-data"
+        >
+            <input type="hidden" th:field="*{idPositionName}">
+            <h1>Удаление должности</h1>
+            <div class="field">
+                <label for="nameDel">Подтвердите название должности</label>
+                <input
+                        id="nameDel"
+                        name="nameDel"
+                        placeholder="Подтвердите название должности"
+                        th:field="*{name}"
+                        type="text"
+
+                />
+                <p th:errors = "*{name}"
+                   th:if="${#fields.hasErrors('name')}">
+                </p>
+                <p th:if="${fail}">
+                    Название должности не соответствует существующему
+                </p>
+                <p th:if="${notEmpty}">
+                    На данной должности еще числятся сотрудники
+                </p>
+            </div>
+            <div>
+                <button type="submit">Добавить должность</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/positions}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+
+<div th:if="${edit}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/editPosition/end}"
+                th:object="${position}"
+                enctype="multipart/form-data"
+        >
+            <h1>Редактирование должности</h1>
+            <input type="hidden" th:field="*{idPositionName}">
+            <div class="field">
+                <label for="nameEdit">Название должности</label>
+                <input
+                        id="nameEdit"
+                        name="nameEdit"
+                        placeholder="Введите название должности"
+                        th:field="*{name}"
+                        type="text"
+
+                />
+                <p th:errors = "*{name}"
+                   th:if="${#fields.hasErrors('name')}">
+                </p>
+                <p th:if="${fail1}">
+                    Такая должность уже существует!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Отредактировать должность</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/positions}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div>
+    <table >
+        <tr>
+            <td>
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/admin/adminPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/admin/adminProfile}" style="color:#171717; text-decoration:none">ПРОФИЛЬ</a></li>
+                <li><a th:href="@{/logout}" style="color:white; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<a th:href="@{/admin/addPosition}" ><i class="fa fa-plus fa-3x" style="color:black"></i></a>
+<div th:switch="${emptiness}">
+    <div th:case="'empty'">Нет зарегистрированных должностей!</div>
+    <div th:case="*">
+        <table>
+            <tr>
+                <th>Название должности</th>
+                <th></th>
+            </tr>
+            <tr th:each="position:${positions}" >
+                <td th:text="*{position.name}">
+                </td>
+                <td><a th:href="@{/admin/editPosition/{id}(id=${position.idPositionName})}" ><i class="fa fa-plus fa-3x" style="color:black"></i></a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<a onclick="history.go(-1)">
+    <button>
+        Назад
+    </button>
+</a>
+</body>
+</html>

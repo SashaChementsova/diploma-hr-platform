@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href ="/styles/register.css">
+    <link rel="stylesheet" href ="/styles/main.css">
+    <link rel="stylesheet" href ="/styles/attribute.css">
+    <style>
+        #td1{
+            min-width: 1000px;
+            max-width: 1000px;
+        }
+        #td2{
+            min-width: 460px;
+            max-width: 460px;
+        }
+        .field{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0 10px 0;
+        }
+    </style>
+    <title>SoftwareSeekers</title>
+</head>
+<body>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" alt="" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/login}" style="color:#171717; text-decoration:none">ВОЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <div >
+        <h1>Регистрация</h1>
+    </div>
+
+    <div>
+        <form
+                method="post"
+                role="form"
+                th:action="@{/register/save}"
+                th:object="${user}"
+        >
+
+            <div class="field">
+                <p style="margin-right: 10px"><abbr data-title="Email в локальной части адреса допускает: числовые значения от 0 до 9, только строчные или прописные буквы латинского алфавита,
+символы подчеркивания “_”, дефис “-“ и точка “.” (точка не может быть в начале или в конце, а также несколько раз подряд, длина - не более 64 символов. Для доменной части то же самое, только не допускается наличие  “_”">Email</abbr></p>
+                <input
+                        id="email"
+                        name="email"
+                        placeholder="Введите email"
+                        th:field="*{email}"
+                        type="text"
+
+                />
+            </div>
+            <div th:if="${wrongEmail}">
+                <div class="info">
+                    Пожалуйста, введите Email в указанном формате!
+                </div>
+            </div>
+            <div class="field">
+                <p><abbr data-title="Пароль должен начинаться и заканчиваться символом, содержать только латинские буквы и хотя бы:
+                            одну цифру, одну прописную букву, одну строчную букву, один специальный символ (@#$%^&+=), а также
+                            не должно быть пробелов. Длина: от 8 до 16 символов">Пароль</abbr></p>
+                <input
+                        id="password"
+                        name="password"
+                        placeholder="Введите пароль"
+                        th:field="*{password}"
+                        type="text"
+                        style="-webkit-text-security: disc;"
+                />
+            </div>
+            <div th:if="${wrongPassword}">
+                <div class="info">
+                    Пожалуйста, введите пароль в указанном формате!
+                </div>
+            </div>
+            <div th:if="${empty}">
+                <div class="info">
+                    Пожалуйста, заполните все поля!
+                </div>
+            </div>
+            <div th:if="${userExist}">
+                <div class="info">
+                    Пользователь с таким Email уже зарегистрирован!
+                </div>
+            </div>
+            <div class="bottom">
+                <button type="submit">Зарегистрироваться</button>
+                <span>Уже зарегистрированы? <a th:href="@{/login}" style="color:#171717;">Вход в учетную запись</a></span>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

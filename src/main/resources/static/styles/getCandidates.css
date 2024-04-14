@@ -1,0 +1,95 @@
+#td1{
+    min-width: 900px;
+    max-width: 900px;
+}
+#td2{
+    min-width: 560px;
+    max-width: 560px;
+}
+.field{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0 10px 0;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 618px;
+    color: white;
+}
+
+.select{
+    margin: 10px 10px 10px 10px;
+    border-radius:36px;
+    display:inline-block;
+    overflow:hidden;
+    color: rgb(84,84,84);
+    background: white;
+    border:1px solid rgba(225, 253, 91,0.9);
+}
+select{
+    width:140px;
+    height:40px;
+    border:0px;
+    outline:none;
+}
+
+.table {
+
+    width: 1410px;
+    border: none;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.table thead th {
+    font-weight: bold;
+    text-align: center;
+
+    border: none;
+    padding: 10px 15px;
+    background: #d8d8d8;
+    font-size: 14px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.table tbody td {
+    text-align: left;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    padding: 10px 15px;
+    font-size: 14px;
+    vertical-align: top;
+}
+.table thead tr th:first-child, .table tbody tr td:first-child {
+    border-left: none;
+}
+.table thead tr th:last-child, .table tbody tr td:last-child {
+    border-right: none;
+}
+.table tbody tr:nth-child(even){
+    background: #f3f3f3;
+}
+button{
+    font-family: "Tahoma";
+    margin: 10px 10px 10px 10px;
+    width: 140px;
+    height: 42px;
+    border-radius:36px;
+    background-color: white;
+    border:1px solid rgba(225, 253, 91,0.9);
+    color:rgb(84,84,84);
+}
+button:hover{
+    box-shadow:0 0 20px rgba(225, 253, 91,0.9);
+}
+
+.finding, .form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}

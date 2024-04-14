@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getDepartments.css">
+</head>
+<body>
+<div th:if="${add}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/addLanguageName/end}"
+                th:object="${languageName}"
+                enctype="multipart/form-data"
+        >
+            <h1>Иностранный язык</h1>
+            <div class="field">
+                <label for="name">Название иностранного языка</label>
+                <input
+                        id="name"
+                        name="name"
+                        placeholder="Введите название иностранного языка"
+                        th:field="*{name}"
+                        type="text"
+
+                />
+                <p th:errors = "*{name}"
+                   th:if="${#fields.hasErrors('name')}">
+                </p>
+                <p th:if="${emptyLanguageName}">
+                    Пожалуйста, введите название иностранного языка!!!
+                </p>
+                <p th:if="${fail}">
+                    Такой иностранный язык уже был внесен в систему!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Добавить иностранный язык</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/languageNames}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+
+<div th:if="${delete}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/deleteLanguageName/end}"
+                th:object="${languageName}"
+                enctype="multipart/form-data"
+        >
+            <h1>Удаление иностранного языка</h1>
+            <div class="field">
+                <input type="hidden" th:field="*{idLanguageName}">
+                <label for="nameDelete">Название иностранного языка</label>
+                <input
+                        id="nameDelete"
+                        name="nameDelete"
+                        placeholder="Подтвердите название иностранного языка"
+                        th:field="*{name}"
+                        type="text"
+
+                />
+                <p th:errors = "*{name}"
+                   th:if="${#fields.hasErrors('name')}">
+                </p>
+                <p th:if="${notEqual}">
+                    Название иностранного языка не совпадает с существующим!
+                </p>
+                <p th:if="${notEmptyEmployee}">
+                    Данный иностранный язык используется сотрудниками компании!!!
+                </p>
+                <p th:if="${notEmptyCandidate}">
+                    Данный иностранный язык используется кандидатами платформы!!!
+                </p>
+                <p th:if="${notEmptyVacancy}">
+                    Иностранный язык не может быть удален, так как существует вакансия с данным языком!
+                </p>
+                <p th:if="${notEmptyTestQuestions}">
+                    Иностранный язык не может быть удален, так как существует действительное тестирование на данный язык!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Удалить иностранный язык</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/languageNames}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+
+<div th:if="${edit}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/editLanguageName/end}"
+                th:object="${languageName}"
+                enctype="multipart/form-data"
+        >
+            <h1>Редактирование иностранного языка</h1>
+            <input type="hidden" th:field="*{idLanguageName}">
+            <div class="field">
+                <label for="nameEdit">Название иностранного языка</label>
+
+                <input
+                        id="nameEdit"
+                        name="nameEdit"
+                        placeholder="Введите название иностранного языка"
+                        th:field="*{name}"
+                        type="text"
+
+                />
+                <p th:errors = "*{name}"
+                   th:if="${#fields.hasErrors('name')}">
+                </p>
+                <p th:if="${emptyLanguageName}">
+                    Пожалуйста, подтвердите название иностранного языка для удаления!!!
+                </p>
+                <p th:if="${fail1}">
+                    Такой иностранный язык уже существует!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Отредактировать иностранный язык</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/languageNames}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/admin/adminPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <a th:href="@{/admin/addLanguageName}" ><i class="fa fa-plus" style="color:black"></i></a>
+    <div th:switch="${emptiness}">
+        <div th:case="'empty'">
+            <h3>Список иностранных языков пуст!</h3>
+            <img th:src="@{/photos/14-transformed.png}">
+        </div>
+        <div th:case="*">
+            <table class="table">
+                <thead>
+                    <th>№</th>
+                    <th>Иностранный язык</th>
+                    <th>Редактирование</th>
+                    <th>Удаление</th>
+                </thead>
+                <tr th:each="languageName, iStat:${languageNames}" th:class="${iStat.even}? 'even_css_class':'odd_css_class'">
+                    <td th:text="${iStat.index+1}"></td>
+                    <td th:text="${languageName.name}">
+                    </td>
+                    <td><a th:href="@{/admin/editLanguageName/{id}(id=${languageName.idLanguageName})}" ><i class="fa fa-pencil" style="color:black"></i></a></td>
+                    <td><a th:href="@{/admin/deleteLanguageName/{id}(id=${languageName.idLanguageName})}" ><i class="fa fa-trash" style="color:black"></i></a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a th:href="@{/admin/adminPage}">
+        <button>
+            Назад
+        </button>
+    </a>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

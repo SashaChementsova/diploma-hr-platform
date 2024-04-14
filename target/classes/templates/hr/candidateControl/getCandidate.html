@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div>
+    <table >
+        <tr>
+            <td>
+                <img th:src="@{/photos/1.png}" >
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/hr/hrPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/hr/hrProfile}" style="color:#171717; text-decoration:none">ПРОФИЛЬ</a></li>
+                <li><a th:href="@{/logout}" style="color:white; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<table>
+    <tr><td colspan="2" th:text="${candidate.getUserDetail().getSNP()}"></td></tr>
+    <tr>
+        <td th:if="${candidateActivity}">
+            В состоянии прохождения собеседования + <a th:href="@{/hr/vacancy/{id}(id=${vacancyId})}" ><i class="fa fa-angle-right" style="color:black"></i></a>
+        </td>
+        <td th:unless="${candidateActivity}">
+           Не активен
+        </td>
+        <td rowspan="5"> <img th:src="@{'/images/'+${candidate.getUserDetail().getImage().getIdImage()}}"  height="60px"/><br><br></td>
+    </tr>
+    <tr>
+        <td th:text="'Дата рождения: '+${candidate.userDetail.birthday}"></td>
+    </tr>
+    <tr>
+        <td th:text="'Email: '+${candidate.userDetail.email}"></td>
+    </tr>
+    <tr>
+        <td th:text="'Моб.телефон: '+${candidate.userDetail.phone}"></td>
+    </tr>
+    <tr>
+        <td th:text="'Опыт работы: '+${candidate.background.experience}+' лет'"></td>
+    </tr>
+    <tr>
+        <td colspan="2" th:text="'Информация: '+${candidate.userDetail.info}"></td>
+    </tr>
+
+    <tr>
+        <td colspan="2">Навыки</td>
+    </tr>
+    <div th:switch="${candidate.background.skills.isEmpty()}">
+        <tr th:case="true"><td>-</td></tr>
+        <tr th:case="*" th:each="skill:${candidate.background.skills}"><td colspan="2" th:text="*{skill.nameSkill}"></td></tr>
+    </div>
+    <tr>
+        <td colspan="2">Образование</td>
+    </tr>
+    <div th:switch="${candidate.educationEntities.isEmpty()}">
+        <tr th:case="true"><td>-</td></tr>
+        <tr th:case="*" th:each="education:${candidate.educationEntities}"><td colspan="2" th:text="*{education.educationType.typeOfEducation}': '*{education:nameEducation} '('*{education.getStringYearOfGraduation()}')'"></td></tr>
+    </div>
+    <tr>
+        <td colspan="2">Иностранные языки</td>
+    </tr>
+    <div th:switch="${candidate.languages.isEmpty()}">
+        <tr th:case="true"><td>-</td></tr>
+        <tr th:case="*" th:each="language:${candidate.languages}"><td colspan="2" th:text="*{language.toString()}"></td></tr>
+    </div>
+
+</table>
+
+<a onclick="history.go(-1)">
+    <button>
+        Назад
+    </button>
+</a>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getPositionNames.css">
+
+</head>
+<body>
+<div th:if="${add}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/addPosDep/end/{id}(id=${departmentMain.idDepartment})}"
+                th:object="${position}"
+                enctype="multipart/form-data"
+        >
+            <h1>Должность</h1>
+            <div class="field">
+                <label for="name">Добавление должности</label>
+                <input
+                        id="name"
+                        name="name"
+                        placeholder="Введите название должности"
+                        th:field="*{name}"
+                        type="text"
+
+                />
+                <p th:errors = "*{name}"
+                   th:if="${#fields.hasErrors('name')}">
+                </p>
+                <p th:if="${fail}">
+                    Такая должность уже существует!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Добавить должность</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/positions/{id}(id=${departmentMain.idDepartment})}" >
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div th:if="${delete}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/deletePosition/end}"
+                th:object="${position}"
+                enctype="multipart/form-data"
+        >
+            <input type="hidden" th:field="*{idPositionName}">
+            <h1>Удаление должности</h1>
+            <div class="field">
+                <label for="nameDel">Подтвердите название должности</label>
+                <input
+                        id="nameDel"
+                        name="nameDel"
+                        placeholder="Подтвердите название должности"
+                        th:field="*{name}"
+                        type="text"
+
+                />
+                <p th:errors = "*{name}"
+                   th:if="${#fields.hasErrors('name')}">
+                </p>
+                <p th:if="${fail}">
+                    Название должности не соответствует существующему
+                </p>
+                <p th:if="${notEmpty}">
+                    На данной должности еще числятся сотрудники
+                </p>
+                <p th:if="${notEmptyVacancy}">
+                    Существует вакансия для данной должности
+                </p>
+                <p th:if="${testQuestion}">
+                    Существует действительное тестирование для данной должности
+                </p>
+            </div>
+            <div>
+                <button type="submit">Удалить должность</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/positions/{id}(id=${departmentMain.idDepartment})}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div th:if="${edit}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/editPosDeb/end/{id}(id=${departmentMain.idDepartment})}"
+                th:object="${position}"
+                enctype="multipart/form-data"
+        >
+            <h1>Редактирование должности</h1>
+            <input type="hidden" th:field="*{idPositionName}">
+            <div class="field">
+                <label for="nameEdit">Название должности</label>
+                <input
+                        id="nameEdit"
+                        name="nameEdit"
+                        placeholder="Введите название должности"
+                        th:field="*{name}"
+                        type="text"
+
+                />
+                <p th:errors = "*{name}"
+                   th:if="${#fields.hasErrors('name')}">
+                </p>
+                <p th:if="${fail1}">
+                    Такая должность уже существует!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Отредактировать должность</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/positions/{id}(id=${departmentMain.idDepartment})}" >
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><
+                ul id="navbar">
+                <li><a th:href="@{/admin/adminPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <h1 th:text="${departmentMain.getNameDepartment()}"></h1>
+    <a th:href="@{/admin/addPosDep/{id}(id=${departmentMain.getIdDepartment()})}" ><i class="fa fa-plus" style="color:black"></i></a>
+    <div th:switch="${emptiness}">
+        <div th:case="'empty'">
+            <h3>Нет зарегистрированных должностей!</h3>
+            <img th:src="@{/photos/14-transformed.png}">
+        </div>
+        <div th:case="*">
+            <table class="table">
+                <thead>
+                    <th>№</th>
+                    <th>Название должности</th>
+                    <th>Сотрудники</th>
+                    <th></th>
+                    <th></th>
+                </thead>
+                <tr th:each="position,iStat:${positions}" th:class="${iStat.even}? 'even_css_class':'odd_css_class'">
+                    <td th:text="${iStat.index+1}"></td>
+                    <td th:text="*{position.name}"></td>
+                    <td><a th:href="@{/admin/employees/{id}(id=${position.getIdPositionName()})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+                    <td><a th:href="@{/admin/editPosDep/{id}(id=${position.getIdPositionName()})}" ><i class="fa fa-plus" style="color:black"></i></a></td>
+                    <td><a th:href="@{/admin/deletePosition/{id}(id=${position.getIdPositionName()})}" ><i class="fa fa-trash" style="color:black"></i></a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <a th:href="@{/admin/departments}">
+        <button>
+            Назад
+        </button>
+    </a>
+</div>
+
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

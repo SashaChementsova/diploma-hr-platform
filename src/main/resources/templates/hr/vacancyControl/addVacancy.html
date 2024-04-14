@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getVacancy.css">
+</head>
+<body>
+
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/hr/hrPage}" style="color:#171717; text-decoration:none; min-width: 200px">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <div class="profile">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/hr/addVacancy/end}"
+                th:object="${vacancy}"
+                enctype="multipart/form-data"
+        >
+            <h1>Добавление вакансии</h1>
+            <div class="finding">
+                <div>
+                    <label for="positionName">Позиция</label>
+                    <select class="select" id="positionName"
+                            name="positionName"
+                            th:field="${positionName.idPositionName}"
+                    >
+                        <div th:each="positionNameAdd:${positionNames}">
+                            <option th:value="${positionNameAdd.idPositionName}" th:text="${positionNameAdd.name}"></option>
+
+                        </div>
+                    </select>
+                </div>
+                <div>
+                    <label for="levelPosition">Уровень позиции</label>
+                    <select class="select" id="levelPosition"
+                            name="levelPosition"
+                            th:field="${levelPosition.idLevelPosition}"
+                    >
+                        <div th:each="levelPositionAdd:${levelPositions}">
+                            <option th:value="${levelPositionAdd.idLevelPosition}" th:text="${levelPositionAdd.level}"></option>
+
+                        </div>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label for="freePositions">Количество свободных мест</label>
+                <input
+                        id="freePositions"
+                        name="freePositions"
+                        placeholder="Введите количество свободных мест"
+                        th:field="*{freePositions}"
+                        type="number"
+                        min="1" step="1"
+                />
+                <p th:errors = "*{freePositions}"
+                   th:if="${#fields.hasErrors('freePositions')}">
+                </p>
+            </div>
+            <div>
+                <label for="experience">Необходимый опыт работы</label>
+                <input
+                        id="experience"
+                        name="experience"
+                        placeholder="Введите необходимый опыт работы"
+                        th:field="${background.experience}"
+                        type="number"
+                        min="0" step="1"
+                />
+                <p th:errors = "*{background.experience}"
+                   th:if="${#fields.hasErrors('background.experience')}">
+                </p>
+            </div>
+            <div class="field">
+                <label for="cityCompany">Филиал компании</label>
+                <select class="select" id="cityCompany"
+                        name="cityCompany"
+                        th:field="${cityCompany.idCityCompany}"
+                >
+                    <div th:each="cityCompanyAdd:${cityCompanies}">
+                        <option th:value="${cityCompanyAdd.idCityCompany}" th:text="${cityCompanyAdd.nameCity}"></option>
+                    </div>
+                </select>
+            </div>
+           <div class="finding">
+               <div >
+                   <label for="languageName">Иностранный язык</label>
+                   <select class="select" id="languageName"
+                           name="languageName"
+                           th:field="${languageNameAdd.idLanguageName}"
+                   >
+                       <div th:each="languageName:${languageNames}">
+                           <option th:value="${languageName.idLanguageName}" th:text="${languageName.name}"></option>
+
+                       </div>
+                   </select>
+               </div>
+               <div >
+                   <label for="levelLanguage">Уровень языка</label>
+                   <select class="select" id="levelLanguage"
+                           name="levelLanguage"
+                           th:field="${levelLanguageAdd.idLevelLanguage}"
+                   >
+                       <div th:each="levelLanguage:${levelLanguages}">
+                           <option th:value="${levelLanguage.idLevelLanguage}" th:text="${levelLanguage.level}"></option>
+
+                       </div>
+                   </select>
+               </div>
+           </div>
+            <div class="finding">
+                <label for="skills">Основные навыки</label>
+                <div th:each="skillItem, itemStat : ${skillL.skillList}">
+                    <select class="select" id="skills" name="skills" th:field="${skillL.skillList[__${itemStat.index}__].idSkill}">
+                        <option th:value="${0}">-</option>
+                        <div th:each="skill: ${skills}">
+                            <option th:value="${skill.idSkill}" th:text="${skill.nameSkill}"></option>
+                        </div>
+                    </select>
+                </div>
+            </div>
+
+            <p th:if="${failLanguageQuestions}">
+                Невозможно сформировать вакансию из-за недостаточного количества вопросов для тестирования по иностранному языку!!!
+            </p>
+            <p th:if="${failPositionQuestions}">
+                Невозможно сформировать вакансию из-за недостаточного количества вопросов для технического тестирования!!!
+            </p>
+            <div>
+                <button type="submit">Добавить вакансию</button>
+            </div>
+        </form>
+        <a th:href="@{/hr/vacancies}">
+            <button>
+                Назад
+            </button>
+        </a>
+    </div>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

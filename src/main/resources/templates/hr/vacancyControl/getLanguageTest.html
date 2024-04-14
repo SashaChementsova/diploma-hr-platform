@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getVacancy.css">
+</head>
+<body>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" >
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/hr/hrPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+<table>
+    <tr><td colspan="2" style="text-align: center">ТЕСТ НА ИНОСТРАННЫЙ ЯЗЫК</td></tr>
+    <tr>
+        <td>Иностранный язык</td>
+        <td th:text="${test.getLanguageTestHasQuestionEntities().get(0).getLanguageTestQuestion().getLanguage().toString()}"></td>
+    </tr>
+    <tr>
+        <td>Кандидат</td>
+        <td th:text="${candidate.getUserDetail().getSNP()}"><a th:href="@{/hr/getCandidateProfile/{idUser}(idUser=${candidate.userDetail.idUserDetails})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+    </tr>
+    <tr>
+        <td>Дата</td>
+        <td th:text="${test.getDate()}"></td>
+    </tr>
+    <div th:if="${trueInterview}">
+        <tr><td style="text-align: center" colspan="2">РЕЗУЛЬТАТ</td></tr>
+        <tr>
+            <td>Общий балл</td>
+            <td th:text="${test.getResult().getPoints()}+'%'"></td>
+        </tr>
+    </div>
+    <div th:unless="${trueInterview}">
+        <tr>
+            <td style="text-align: center" colspan="2">Тестирование еще не завершено</td>
+        </tr>
+    </div>
+</table>
+<a th:href="@{/hr/vacancy/{id}(id=${idVacancy})}">
+    <button>
+        Назад
+    </button>
+</a>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

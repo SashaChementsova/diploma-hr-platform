@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href ="/styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div>
+    <table >
+        <tr>
+            <td>
+                <img th:src="@{/photos/1.png}" >
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/}" style="color:#171717; text-decoration:none; min-width: 200px">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/login}" style="color:#171717; text-decoration:none">ВОЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<table>
+    <tr>
+        <td th:text="'Позиция: '+${vacancy.getPosition().toString()}"></td>
+        <td>Куратор вакансии</td>
+    </tr>
+    <tr>
+        <td th:text="'Количество свободных мест: '+${vacancy.freePositions}"></td>
+        <td rowspan="3"> <img th:src="@{'/images/'+${vacancy.getHr().getUserDetail().getImage().getIdImage()}}"  height="60px"/><br><br></td>
+    </tr>
+    <div th:switch="${vacancy.getTrialEntities().isEmpty()}">
+        <tr th:case="true">
+            <td style="text-decoration-line: underline;text-decoration-color:lawngreen;">Количество человек, рассматривающих вакансию: 0</td>
+        </tr>
+        <tr th:case="*">
+            <div th:if="${vacancy.getTrialEntities().size() <= vacancy.freePositions}">
+                <td style="text-decoration-line: underline;text-decoration-color:lawngreen;" th:text="'Количество человек, рассматривающих вакансию: '+${vacancy.getTrialEntities().size()}"></td>
+            </div>
+            <div th:unless="${vacancy.getTrialEntities().size() <= vacancy.freePositions}">
+                <td style="text-decoration-line: underline;text-decoration-color:#ff3232;" th:text="'Количество человек, рассматривающих вакансию: '+${employee.cityCompany.nameCity}"></td>
+            </div>
+        </tr>
+
+    </div>
+    <tr>
+        <td th:text="'Филиал компании: '+${vacancy.cityCompany.nameCity}"></td>
+    </tr>
+    <tr>
+        <td th:text="'Необходимый опыт работы: '+${vacancy.background.experience}"></td>
+        <td  th:text="${vacancy.getHr().getUserDetail().getSNP()}"></td>
+    </tr>
+    <tr>
+        <td th:text="'Уровень английского языка: '+${vacancy.getLanguages().get(0).toString()}"></td>
+        <td  th:text="'Контакты: '+${vacancy.getHr().getUserDetail().getEmail()}"></td>
+    </tr>
+    <tr>
+        <td colspan="2">Необходимые навыки</td>
+    </tr>
+    <div th:switch="${vacancy.background.skills.isEmpty()}">
+        <tr th:case="true"><td colspan="2">-</td></tr>
+        <tr th:case="*" th:each="skill:${vacancy.background.skills}"><td colspan="2" th:text="*{skill.nameSkill}"></td></tr>
+    </div>
+</table>
+<a th:href="@{/visitor/vacancies}">
+    <button>
+        Назад
+    </button>
+</a>
+</body>
+</html>

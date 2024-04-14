@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href ="/styles/main.css">
+    <link rel="stylesheet" href ="/styles/getVacancies.css">
+</head>
+<body>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/}" style="color:#171717; text-decoration:none; min-width: 200px">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/login}" style="color:#171717; text-decoration:none">ВОЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+
+<div class="container">
+    <div >
+        <div class="finding">
+            <form th:action="@{/visitor/vacancies}"  method="get" class="form">
+                <div>
+                    <label for="positionNameFind">Позиция</label>
+                    <select class="select" id="positionNameFind"
+                            name="positionNameFind"
+                            th:field="${positionNameFind.idPositionName}"
+
+                    >
+                        <div th:each="positionNameFinding:${positionNames}">
+                            <option th:value="${positionNameFinding.idPositionName}" th:text="${positionNameFinding.name}"></option>
+                        </div>
+                    </select>
+                </div>
+                <div>
+                    <label for="levelPositionFind">Уровень позиции</label>
+                    <select class="select" id="levelPositionFind"
+                            name="levelPositionFind"
+                            th:field="${levelPositionFind.idLevelPosition}"
+
+                    >
+                        <div   th:each="levelPositionFinding:${levelPositions}">
+                            <option th:value="${levelPositionFinding.idLevelPosition}" th:text="${levelPositionFinding.level}"></option>
+                        </div>
+                    </select>
+                </div>
+                <button type="submit" class="btn" >Поиск</button>
+            </form>
+            <a th:href="@{/visitor/vacancies}" ><i class="fa fa-bars fa-lg" style="color:white"></i></a>
+        </div>
+        <div th:switch="${emptiness}">
+            <div th:case="'empty'">Список вакансий пуст!</div>
+            <div th:case="*">
+                <table class="table">
+                    <thead>
+                        <th>№</th>
+                        <th>Позиция</th>
+                        <th>Количество свободных мест</th>
+                        <th>Необходимый опыт работы</th>
+                        <th>Филиал компании</th>
+                        <th>Просмотр вакансии</th>
+                    </thead>
+                    <tr th:each="vacancy, iStat:${vacancies}" th:class="${iStat.even}? 'even_css_class':'odd_css_class'">
+                        <td th:text="${iStat.index+1}"></td>
+                        <td th:text="${vacancy.getPosition().toString()}"></td>
+                        <td th:text="${vacancy.freePositions}">
+                        <td th:text="${vacancy.background.experience}+' лет'">
+                        <td th:text="${vacancy.cityCompany.nameCity}">
+                        <td><a th:href="@{/visitor/vacancy/{id}(id=${vacancy.idVacancy})}" ><i class="fa fa-angle-right fa-lg" style="color:black"></i></a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <a th:href="@{/}">
+            <button>
+                Назад
+            </button>
+        </a>
+    </div>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

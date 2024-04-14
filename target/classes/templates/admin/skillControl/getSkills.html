@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getDepartments.css">
+</head>
+<body>
+<div th:if="${add}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/addSkill/end}"
+                th:object="${skill}"
+                enctype="multipart/form-data"
+        >
+            <h1>Добавление навыка</h1>
+            <div class="field">
+                <label for="nameSkill">Название навыка</label>
+                <input
+                        id="nameSkill"
+                        name="nameSkill"
+                        placeholder="Введите название навыка"
+                        th:field="*{nameSkill}"
+                        type="text"
+
+                />
+                <p th:errors = "*{nameSkill}"
+                   th:if="${#fields.hasErrors('nameSkill')}">
+                </p>
+                <p th:if="${emptySkill}">
+                    Пожалуйста, введите название навыка!!!
+                </p>
+                <p th:if="${fail}">
+                    Такой навык уже существует!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Добавить навык</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/skills}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+
+<div th:if="${delete}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/deleteSkill/end}"
+                th:object="${skill}"
+                enctype="multipart/form-data"
+        >
+            <h1>Удаление навыка</h1>
+            <div class="field">
+                <input type="hidden" th:field="*{idSkill}">
+                <p>Вы действительно хотите данный навык?</p>
+                <p th:if="${notEmptyBackground}">
+                    Удаление невозможно, так как данный навык используется пользователями системы!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Удалить навык</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/skills}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+
+<div th:if="${edit}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/editSkill/end}"
+                th:object="${skill}"
+                enctype="multipart/form-data"
+        >
+            <h1>Редактирование навыка</h1>
+            <input type="hidden" th:field="*{idSkill}">
+            <div class="field">
+                <label for="nameSkillEdit">Название навыка</label>
+
+                <input
+                        id="nameSkillEdit"
+                        name="nameSkillEdit"
+                        placeholder="Введите навыка"
+                        th:field="*{nameSkill}"
+                        type="text"
+
+                />
+                <p th:errors = "*{nameSkill}"
+                   th:if="${#fields.hasErrors('nameSkill')}">
+                </p>
+                <p th:if="${emptySkill}">
+                    Пожалуйста, введите название навыка!!!
+                </p>
+                <p th:if="${fail}">
+                    Такой навык уже существует!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Отредактировать навык</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/skills}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/admin/adminPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <div class="finding">
+        <form th:action="@{/admin/skills}"  method="get" class="form">
+            <input type="text" th:field="${nameSkill.data}">
+            <button type="submit" class="btn" >Поиск</button>
+        </form>
+        <a th:href="@{/admin/skills}" ><i class="fa fa-bars" style="color:black"></i></a>
+        <a th:href="@{/admin/addSkill}" ><i class="fa fa-plus" style="color:black"></i></a>
+    </div>
+    <div th:switch="${emptiness}">
+        <div th:case="'empty'">
+            <h3>Нет зарегистрированных навыков!</h3>
+            <img th:src="@{/photos/14-transformed.png}">
+        </div>
+        <div th:case="*">
+            <table class="table">
+                <thead>
+                    <th>№</th>
+                    <th>Навык</th>
+                    <th>Редактирование</th>
+                    <th>Удаление</th>
+                </thead>
+                <tr th:each="skill, iStat:${skills}" th:class="${iStat.even}? 'even_css_class':'odd_css_class'">
+                    <td th:text="${iStat.index+1}"></td>
+                    <td th:text="${skill.nameSkill}">
+                    <td><a th:href="@{/admin/editSkill/{id}(id=${skill.idSkill})}" ><i class="fa fa-pencil" style="color:black"></i></a></td>
+                    <td><a th:href="@{/admin/deleteSkill/{id}(id=${skill.idSkill})}" ><i class="fa fa-trash" style="color:black"></i></a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a th:href="@{/admin/adminPage}">
+        <button>
+            Назад
+        </button>
+    </a>
+
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/attribute.css">
+    <link rel="stylesheet" href="/styles/getHr.css">
+
+</head>
+<body>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" >
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/hr/hrPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <div class="profile">
+        <table>
+            <tr><td style="text-align: center" colspan="2" th:text="${employee.getUserDetail().getSNP()}"></td></tr>
+            <tr>
+                <td th:text="'Позиция: '+*{employee.position.toString()}"></td>
+                <td rowspan="6"> <img th:src="@{'/images/'+${employee.getUserDetail().getImage().getIdImage()}}" height="120px" width="200px"/><br><br></td>
+            </tr>
+            <tr>
+                <td th:text="'Город: '+${employee.cityCompany.nameCity}"></td>
+            </tr>
+            <tr>
+                <td th:text="'Дата рождения: '+${employee.userDetail.birthday}"></td>
+            </tr>
+            <tr>
+                <td th:text="'Email: '+${employee.userDetail.email}"></td>
+            </tr>
+            <tr>
+                <td th:text="'Моб.телефон: '+${employee.userDetail.phone}"></td>
+            </tr>
+            <tr>
+                <td th:text="'Опыт работы: '+${employee.background.experience}+' лет'"></td>
+            </tr>
+            <tr>
+                <td colspan="2" th:text="'Информация: '+${employee.userDetail.info}"></td>
+            </tr>
+            <tr>
+
+                <td th:text="'Дата окончания контракта: '+${employee.dateContractEnd}"></td>
+            </tr>
+            <tr>
+                <td th:text="'Дата подписания контракта: '+${employee.dateRecruitment}"></td>
+            </tr>
+            <tr>
+                <td  style="text-align: center"  colspan="2">Навыки</td>
+            </tr>
+            <div th:switch="${employee.background.skills.isEmpty()}">
+                <tr th:case="true"><td style="text-align: center" >-</td></tr>
+                <tr th:case="*" th:each="skill:${employee.background.skills}"><td colspan="2" th:text="*{skill.nameSkill}"></td></tr>
+            </div>
+            <tr>
+                <td  style="text-align: center"  colspan="2">Образование</td>
+            </tr>
+            <div th:switch="${employee.educationEntities.isEmpty()}">
+                <tr th:case="true"><td style="text-align: center" >-</td></tr>
+                <tr th:case="*" th:each="education:${employee.educationEntities}"><td colspan="2" th:text="*{education.toString()}"></td></tr>
+            </div>
+            <tr>
+                <td  style="text-align: center" colspan="2">Иностранные языки</td>
+            </tr>
+            <div th:switch="${employee.languages.isEmpty()}">
+                <tr th:case="true"><td style="text-align: center" >-</td></tr>
+                <tr th:case="*" th:each="language:${employee.languages}"><td colspan="2" th:text="*{language.toString()}"></td></tr>
+            </div>
+
+        </table>
+        <div class="buttons">
+            <a th:href="@{/hr/contractHr/{idEmployee}(idEmployee=${employee.idEmployee})}">
+                <button>
+                    Сохранить трудовой договор
+                </button>
+            </a>
+            <a th:href="@{/hr/editProfile}">
+                <button>
+                    Редактирование профиля
+                </button>
+            </a>
+            <a th:href="@{/hr/changePassword}">
+                <button>
+                    Изменить пароль
+                </button>
+            </a>
+            <a th:href="@{/hr/hrPage}">
+                <button>
+                    Назад
+                </button>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

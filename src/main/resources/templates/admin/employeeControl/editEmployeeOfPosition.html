@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>SoftwareSeekers</title>
+
+</head>
+<body>
+<div>
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/}" style="color:#171717; text-decoration:none; min-width: 200px">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/login}" style="color:#171717; text-decoration:none">ВОЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div >
+    <form
+            method="post"
+            role="form"
+            th:action="@{/admin/editEmployeePos/end}"
+            th:object="${employee}"
+            enctype="multipart/form-data"
+    >
+        <input type="hidden" th:field="*{userDetail.idUserDetails}">
+        <input type="hidden" th:field="*{background.idBackground}">
+        <input type="hidden" th:field="*{userDetail.password}">
+        <input type="hidden" th:field="*{idEmployee}">
+        <h1>Редактирование личных данных сотрудника</h1>
+        <div class="field">
+            <p style="margin-right: 10px"><abbr data-title="Email в локальной части адреса допускает: числовые значения от 0 до 9, только строчные или прописные буквы латинского алфавита,
+символы подчеркивания “_”, дефис “-“ и точка “.” (точка не может быть в начале или в конце, а также несколько раз подряд, длина - не более 64 символов. Для доменной части то же самое, только не допускается наличие  “_”">Email</abbr></p>
+            <input
+                    id="email"
+                    name="email"
+                    placeholder="Введите email"
+                    th:field="*{userDetail.email}"
+                    type="text"
+
+            />
+        </div>
+        <div th:if="${wrongEmail}">
+            <div class="info">
+                Пожалуйста, введите Email в указанном формате!
+            </div>
+        </div>
+        <div class="field">
+            <label for="surname">Фамилия</label>
+            <input
+                    id="surname"
+                    name="surname"
+                    placeholder="Введите фамилию"
+                    th:field="*{userDetail.surname}"
+                    type="text"
+                    pattern="([А-Яёа-я -]+)|([\s]+)"
+            />
+            <p th:errors = "*{userDetail.surname}" class="info"
+               th:if="${#fields.hasErrors('userDetail.surname')}"></p>
+        </div>
+
+        <div class="field">
+            <label for="name">Имя</label>
+            <input
+                    id="name"
+                    name="name"
+                    placeholder="Введите имя"
+                    th:field="*{userDetail.name}"
+                    type="text"
+                    pattern="([А-Яёа-я -]+)|([\s]+)"
+            />
+            <p th:errors = "*{userDetail.name}" class="info"
+               th:if="${#fields.hasErrors('userDetail.name')}"></p>
+        </div>
+        <div class="field">
+            <label for="patronymic">Отчество</label>
+            <input
+                    id="patronymic"
+                    name="patronymic"
+                    placeholder="Введите отчество"
+                    th:field="*{userDetail.patronymic}"
+                    type="text"
+                    pattern="([А-Яёа-я -]+)|([\s]+)"
+            />
+            <p th:errors = "*{userDetail.patronymic}" class="info"
+               th:if="${#fields.hasErrors('userDetail.patronymic')}"></p>
+        </div>
+        <div class="field">
+            <label for="birthday">Дата рождения</label>
+            <input
+                    style="color: rgb(86, 85, 85);font-size: 14px;"
+                    id="birthday"
+                    name="birthday"
+                    placeholder="Введите дату рождения"
+                    th:field="*{userDetail.birthday}"
+                    type="date"
+            />
+            <p th:errors = "*{userDetail.birthday}" class="info"
+               th:if="${#fields.hasErrors('userDetail.birthday')}"></p>
+        </div>
+        <div class="field">
+            <label for="info">ИНФО</label>
+            <input
+                    id="info"
+                    name="info"
+                    placeholder="Введите info"
+                    th:field="*{userDetail.info}"
+                    type="text"
+                    pattern="([А-Яёа-я -]+)|([\s]+)"
+            />
+            <p th:errors = "*{userDetail.info}" class="info"
+               th:if="${#fields.hasErrors('userDetail.info')}"></p>
+        </div>
+        <div class="field">
+            <label for="phone">Номер телефона</label>
+            <input
+                    id="phone"
+                    name="phone"
+                    th:field="*{userDetail.phone}"
+                    type="tel"
+                    placeholder="+375_________"
+                    pattern="\+{1}375(([2]{1}([5]{1}|[9]{1}))|([3]{1}[3]{1})|([4]{1}[4]{1}))[0-9]{3}[0-9]{4}"
+            />
+            <p th:errors = "*{userDetail.phone}" class="info"
+               th:if="${#fields.hasErrors('userDetail.phone')}"></p>
+        </div>
+        <div th:if="${existPhone}">
+            <div class="info">
+                Пользователь с таким номером телефона уже зарегистрирован!
+            </div>
+        </div>
+        <div class="field">
+            <label for="dateBegin">Дата подписания контракта</label>
+            <input
+                    style="color: rgb(86, 85, 85);font-size: 14px;"
+                    id="dateBegin"
+                    name="dateBegin"
+                    placeholder="Введите дату подписания контракта"
+                    th:field="*{dateRecruitment}"
+                    type="date"
+            />
+            <p th:errors = "*{dateRecruitment}" class="info"
+               th:if="${#fields.hasErrors('dateRecruitment')}"></p>
+        </div>
+        <div th:if="${failDateBegin}">
+            <div class="info">
+                Дата подписания контракта не может быть больше текущей даты.
+            </div>
+        </div>
+        <div class="field">
+            <label for="dateEnd">Дата окончания контракта</label>
+            <input
+                    style="color: rgb(86, 85, 85);font-size: 14px;"
+                    id="dateEnd"
+                    name="dateEnd"
+                    placeholder="Введите окончания контракта"
+                    th:field="*{dateContractEnd}"
+                    type="date"
+            />
+            <p th:errors = "*{dateContractEnd}" class="info"
+               th:if="${#fields.hasErrors('dateContractEnd')}"></p>
+        </div>
+        <div th:if="${failDateEnd}">
+            <div class="info">
+                Дата окончания контракта должна быть больше текущей даты.
+            </div>
+        </div>
+        <div th:if="${equalDates}">
+            <div class="info">
+                Даты подписания и окончания контракта должны быть разными.
+            </div>
+        </div>
+        <div th:if="${diffDates}">
+            <div class="info">
+                Разница между датами подписания контракта и окончания контракта должна быть от 1 до 5 лет.
+            </div>
+        </div>
+        <div class="field">
+            <label>Город</label>
+            <select th:field="*{cityCompany.idCityCompany}">
+                <div th:each="c : ${cities}"><option th:value="${c.idCityCompany}"><p th:text="${c.nameCity}"></p></option></div>
+            </select>
+        </div>
+        <div class="field">
+            <label>Позиция</label>
+            <select th:field="*{position.positionName.idPositionName}">
+                <div th:each="p : ${positions}"><option th:value="${p.idPositionName}"><p th:text="${p.name}"></p></option></div>
+            </select>
+        </div>
+        <div class="field">
+            <label>Уровень позиции</label>
+            <select th:field="*{position.levelPosition.idLevelPosition}">
+                <div th:each="lp : ${levelPositions}"><option th:value="${lp.idLevelPosition}"><p th:text="${lp.level}"></p></option></div>
+            </select>
+        </div>
+        <div th:if="${empty}">
+            <div class="info">
+                Пожалуйста, заполните все поля!
+            </div>
+        </div>
+        <div th:if="${age}">
+            <div class="info">
+                Сотрудниками могут быть только люди, достигшие 18 лет!
+            </div>
+        </div>
+
+        <div>
+            <button type="submit">Отредактировать данные сотрудника</button>
+        </div>
+    </form>
+    <a onclick="history.go(-1)">
+        <button>
+            Назад
+        </button>
+    </a>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div>
+    <table >
+        <tr>
+            <td>
+                <img th:src="@{/photos/1.png}" >
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/admin/adminPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/admin/adminProfile}" style="color:#171717; text-decoration:none">ПРОФИЛЬ</a></li>
+                <li><a th:href="@{/logout}" style="color:white; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<table>
+    <tr><td colspan="2" th:text="${employee.getUserDetail().getSNP()}"></td></tr>
+    <tr>
+        <td th:text="'Позиция: '+*{employee.position.toString()}"></td>
+        <td rowspan="6"> <img th:src="@{'/images/'+${employee.getUserDetail().getImage().getIdImage()}}"  height="60px"/><br><br></td>
+    </tr>
+    <tr>
+        <td th:text="'Город: '+${employee.cityCompany.nameCity}"></td>
+    </tr>
+    <tr>
+        <td th:text="'Дата рождения: '+${employee.userDetail.birthday}"></td>
+    </tr>
+    <tr>
+        <td th:text="'Email: '+${employee.userDetail.email}"></td>
+    </tr>
+    <tr>
+        <td th:text="'Моб.телефон: '+${employee.userDetail.phone}"></td>
+    </tr>
+    <tr>
+        <td th:text="'Опыт работы: '+${employee.background.experience}+' лет'"></td>
+    </tr>
+    <tr>
+        <td colspan="2" th:text="'Информация: '+${employee.userDetail.info}"></td>
+    </tr>
+    <tr>
+        <td th:text="'Дата подписания контракта: '+${employee.dateRecruitment}"></td>
+        <td th:text="'Дата окончания контракта: '+${employee.dateContractEnd}"></td>
+    </tr>
+    <tr>
+        <td colspan="2">Навыки</td>
+    </tr>
+    <div th:switch="${employee.background.skills.isEmpty()}">
+        <tr th:case="true"><td>-</td></tr>
+        <tr th:case="*" th:each="skill:${employee.background.skills}"><td colspan="2" th:text="*{skill.nameSkill}"></td></tr>
+    </div>
+    <tr>
+        <td colspan="2">Иностранные языки</td>
+    </tr>
+    <div th:switch="${employee.languages.isEmpty()}">
+        <tr th:case="true"><td>-</td></tr>
+        <tr th:case="*" th:each="language:${employee.languages}"><td colspan="2" th:text="*{language.toString()}"></td></tr>
+    </div>
+
+</table>
+<a th:href="@{/contract/{idEmployee}(idEmployee=${employee.idEmployee})}">
+    <button>
+        Сохранить трудовой договор
+    </button>
+</a>
+<a th:href="@{/admin/employees}">
+    <button>
+        Назад
+    </button>
+</a>
+</body>
+</html>

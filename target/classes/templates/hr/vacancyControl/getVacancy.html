@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getVacancy.css">
+</head>
+<body>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" >
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/hr/hrPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div th:if="${deleteTrial}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/hr/deleteCandidateFromVacancyEnd/{id}(id=${idTrial})}"
+                enctype="multipart/form-data"
+        >
+            <h1>Прекращение прохождения собеседования</h1>
+            <div class="field">
+                <div th:text="${'Вы действительно хотите прекратить прохождение собеседования для '+person+'?'}"></div>
+            </div>
+            <div>
+                <button type="submit">Прекратить</button>
+            </div>
+        </form>
+        <a th:href="@{/hr/vacancy/{id}(id=${vacancy.idVacancy})}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div class="container">
+    <table>
+        <tr><td th:text="'Позиция: '+${vacancy.getPosition().toString()}"></td></tr>
+        <tr><td th:text="'Количество свободных мест: '+${vacancy.freePositions}"></td></tr>
+        <div th:switch="${vacancy.getTrialEntities().isEmpty()}">
+            <tr th:case="true">
+                <td style="text-decoration-line: underline;text-decoration-color:lawngreen;">Количество человек, рассматривающих вакансию: 0</td>
+            </tr>
+            <tr th:case="*">
+                <div th:if="${vacancy.getTrialEntities().size() <= vacancy.freePositions}">
+                    <td style="text-decoration-line: underline;text-decoration-color:lawngreen;" th:text="'Количество человек, рассматривающих вакансию: '+${vacancy.getTrialEntities().size()}"></td>
+                </div>
+                <div th:unless="${vacancy.getTrialEntities().size() <= vacancy.freePositions}">
+                    <td style="text-decoration-line: underline;text-decoration-color:#ff3232;" th:text="'Количество человек, рассматривающих вакансию: '+${employee.cityCompany.nameCity}"></td>
+                </div>
+            </tr>
+
+        </div>
+        <tr>
+            <td th:text="'Филиал компании: '+${vacancy.cityCompany.nameCity}"></td>
+        </tr>
+        <tr>
+            <td th:text="'Необходимый опыт работы: '+${vacancy.background.experience}"></td>
+        </tr>
+        <tr>
+            <td th:text="'Уровень английского языка: '+${vacancy.getLanguages().get(0).toString()}"></td>
+        </tr>
+        <tr>
+            <td >Необходимые навыки</td>
+        </tr>
+        <div th:switch="${vacancy.background.skills.isEmpty()}">
+            <tr th:case="true"><td>-</td></tr>
+            <tr th:case="*" th:each="skill:${vacancy.background.skills}"><td th:text="*{skill.nameSkill}"></td></tr>
+        </div>
+    </table>
+    <div th:if="${finish}">
+        <a th:href="@{/hr/getEmployeesFromCandidate/{id}(id=${vacancy.idVacancy})}">
+            <button>
+                Принять решение по найму сотрудников
+            </button>
+        </a>
+    </div>
+    <h1>КАНДИДАТЫ</h1>
+    <div th:if="${emptiness}">
+        Список прохождений кандидатами вакансии пуст!!!
+    </div>
+    <div th:unless="${emptiness}">
+        <table class="table">
+            <thead>
+                <th>№</th>
+                <th>ФИО</th>
+                <th>Техническое тестирование</th>
+                <th>Тестирование иностранного языка</th>
+                <th>Собеседование</th>
+                <th>Профиль кандидата</th>
+                <th></th>
+            </thead>
+            <div th:each="trial, iStat:${trials}" th:class="${iStat.even}? 'even_css_class':'odd_css_class'">
+                <tr>
+                    <td th:text="${iStat.index+1}"></td>
+                    <td th:text="${trial.candidate.userDetail.getSNP()}"></td>
+                    <div th:if="${trial.getResultTesting().getPositionTest().getResult().getPoints()==-1}">
+                        <td><a th:href="@{/hr/positionTest/{idVacancy}/{idTrial}(idVacancy=${vacancy.idVacancy},idTrial=${trial.idTrial})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+                    </div>
+                    <div th:unless="${trial.getResultTesting().getPositionTest().getResult().getPoints()==-1}">
+                        <td  th:text="${trial.getResultTesting().getPositionTest().getResult().getPoints()}+'%'"></td>
+                    </div>
+                    <div th:if="${trial.getResultTesting().getLanguageTestEntities().get(0).getResult().getPoints()==-1}">
+                        <td><a th:href="@{/hr/languageTest/{idVacancy}/{idTrial}(idVacancy=${vacancy.idVacancy},idTrial=${trial.idTrial})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+                    </div>
+                    <div th:unless="${trial.getResultTesting().getLanguageTestEntities().get(0).getResult().getPoints()==-1}">
+                        <td  th:text="${trial.getResultTesting().getLanguageTestEntities().get(0).getResult().getPoints()}+'%'"></td>
+                    </div>
+                    <div th:if="${trial.getInterviewEntities().isEmpty()}">
+                        <td><a th:href="@{/hr/addInterview/{id}(id=${trial.idTrial})}"><button>Назначить собеседование</button></a></td>
+                    </div>
+                    <div th:unless="${trial.getInterviewEntities().isEmpty()}">
+                        <div th:if="${trial.getInterviewEntities().get(0).getResult().getPoints()==-1}">
+                            <td><a th:href="@{/hr/interview/{idVacancy}/{idTrial}(idVacancy=${vacancy.idVacancy},idTrial=${trial.idTrial})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+                        </div>
+                        <div th:unless="${trial.getInterviewEntities().get(0).getResult().getPoints()==-1}">
+                            <td th:text="${trial.getInterviewEntities().get(0).getResult().getPoints()}"></td>
+                        </div>
+                    </div>
+                    <td><a th:href="@{/hr/getCandidateProfile/{idUser}(idUser=${trial.candidate.userDetail.idUserDetails})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+                    <div th:if="${trial.getResultTesting().getLanguageTestEntities().get(0).getResult().getPoints()!=-1}">
+                        <div th:if="${trial.getResultTesting().getPositionTest().getResult().getPoints()!=-1}">
+                            <div th:if="${trial.getInterviewEntities().isEmpty()}">
+                                <td><a th:href="@{/hr/deleteCandidateFromVacancy/{id}(id=${trial.idTrial})}"><button>Отказать в прохождении собеседования</button></a></td>
+                            </div>
+                        </div>
+                    </div>
+                </tr>
+            </div>
+        </table>
+    </div>
+    <a th:href="@{/hr/vacancies}">
+        <button>
+            Назад
+        </button>
+    </a>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getLanguageQuestions.css">
+</head>
+<body>
+<div th:if="${add}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/hr/addPositionQuestion/end}"
+                th:object="${positionTestQuestion}"
+                enctype="multipart/form-data"
+        >
+            <h1 style="text-align: center">Вопрос для технического теста</h1>
+            <div class="finding">
+                <div class="field">
+                    <label for="positionName">Позиция</label>
+                    <select class="select" id="positionName"
+                            name="positionName"
+                            th:field="${positionName.idPositionName}"
+                    >
+                        <div th:each="positionNameAdd:${positionNames}">
+                            <option th:value="${positionNameAdd.idPositionName}" th:text="${positionNameAdd.name}"></option>
+
+                        </div>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="levelPosition">Уровень позиции</label>
+                    <select class="select" id="levelPosition"
+                            name="levelPosition"
+                            th:field="${levelPosition.idLevelPosition}"
+                    >
+                        <div th:each="levelPositionAdd:${levelPositions}">
+                            <option th:value="${levelPositionAdd.idLevelPosition}" th:text="${levelPositionAdd.level}"></option>
+
+                        </div>
+                    </select>
+                </div>
+            </div>
+            <div class="partF">
+                <div class="partF2">
+                    <label for="question">Вопрос</label>
+                    <input
+                            id="question"
+                            name="question"
+                            placeholder="Введите вопрос"
+                            th:field="*{question}"
+                            type="text"
+
+                    />
+                    <p th:errors = "*{question}"
+                       th:if="${#fields.hasErrors('question')}">
+                    </p>
+                    <label for="rightAnswer">Правильный ответ</label>
+                    <input
+                            id="rightAnswer"
+                            name="rightAnswer"
+                            placeholder="Введите правильный ответ"
+                            th:field="*{rightAnswer}"
+                            type="text"
+
+                    />
+                    <p th:errors = "*{rightAnswer}"
+                       th:if="${#fields.hasErrors('rightAnswer')}">
+                    </p>
+                    <label for="answer2">Ответ №2</label>
+                    <input
+                            id="answer2"
+                            name="answer2"
+                            placeholder="Введите ответ №2"
+                            th:field="*{answer2}"
+                            type="text"
+
+                    />
+                    <p th:errors = "*{answer2}"
+                       th:if="${#fields.hasErrors('answer2')}">
+                    </p>
+                    <label for="answer3">Ответ №3</label>
+                    <input
+                            id="answer3"
+                            name="answer3"
+                            placeholder="Введите ответ №3"
+                            th:field="*{answer3}"
+                            type="text"
+
+                    />
+                    <p th:errors = "*{answer3}"
+                       th:if="${#fields.hasErrors('answer3')}">
+                    </p>
+
+                </div>
+                <div class="partF2">
+                    <label for="answer4">Ответ №4</label>
+                    <input
+                            id="answer4"
+                            name="answer4"
+                            placeholder="Введите ответ №4"
+                            th:field="*{answer4}"
+                            type="text"
+
+                    />
+                    <p th:errors = "*{answer4}"
+                       th:if="${#fields.hasErrors('answer4')}">
+                    </p>
+                    <label for="point">Количество баллов</label>
+                    <input
+                            id="point"
+                            name="point"
+                            placeholder="Введите количество баллов"
+                            th:field="*{point}"
+                            type="number"
+                            min="0" step="0.1"
+                    />
+                    <p th:errors = "*{point}"
+                       th:if="${#fields.hasErrors('point')}">
+                    </p>
+
+                </div>
+            </div>
+            <p th:if="${emptyPositionQuestion}">
+                Пожалуйста, введите все данные!!!
+            </p>
+            <div>
+                <button type="submit">Добавить вопрос</button>
+            </div>
+        </form>
+        <a th:href="@{/hr/positionQuestions}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+
+<div th:if="${delete}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/hr/deletePositionQuestion/end}"
+                th:object="${positionTestQuestion}"
+                enctype="multipart/form-data"
+        >
+            <h1 style="text-align: center">Удаление вопроса для технического теста</h1>
+            <div class="field">
+                <input type="hidden" th:field="*{idPositionTestQuestion}">
+                <p>Вы действительно хотите удалить вопрос?</p>
+                <p th:if="${notEmptyTestQuestions}">
+                    Удаление невозможно, так как данный вопрос присутствует в действительном тесте!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Удалить вопрос</button>
+            </div>
+        </form>
+        <a th:href="@{/hr/positionQuestions}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+
+<div th:if="${edit}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/hr/editPositionQuestion/end}"
+                th:object="${positionTestQuestion}"
+                enctype="multipart/form-data"
+        >
+            <input type="hidden" th:field="*{idPositionTestQuestion}">
+            <h1 style="text-align: center">Редактирование вопроса для технического теста</h1>
+            <div class="finding">
+                <div class="field">
+                    <label for="positionNameEdit">Позиция</label>
+                    <select class="select" id="positionNameEdit"
+                            name="positionNameEdit"
+                            th:field="${positionName.idPositionName}"
+                    >
+                        <div th:each="positionNameAdd:${positionNames}">
+                            <option th:value="${positionNameAdd.idPositionName}" th:text="${positionNameAdd.name}"></option>
+
+                        </div>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="levelPositionEdit">Уровень позиции</label>
+                    <select class="select" id="levelPositionEdit"
+                            name="levelPositionEdit"
+                            th:field="${levelPosition.idLevelPosition}"
+                    >
+                        <div th:each="levelPositionAdd:${levelPositions}">
+                            <option th:value="${levelPositionAdd.idLevelPosition}" th:text="${levelPositionAdd.level}"></option>
+
+                        </div>
+                    </select>
+                </div>
+            </div>
+            <div class="partF">
+                <div class="partF2">
+                    <label for="questionEdit">Вопрос</label>
+                    <input
+                            id="questionEdit"
+                            name="questionEdit"
+                            placeholder="Введите вопрос"
+                            th:field="*{question}"
+                            type="text"
+
+                    />
+                    <p th:errors = "*{question}"
+                       th:if="${#fields.hasErrors('question')}">
+                    </p>
+                    <label for="rightAnswerEdit">Правильный ответ</label>
+                    <input
+                            id="rightAnswerEdit"
+                            name="rightAnswerEdit"
+                            placeholder="Введите правильный ответ"
+                            th:field="*{rightAnswer}"
+                            type="text"
+
+                    />
+                    <p th:errors = "*{rightAnswer}"
+                       th:if="${#fields.hasErrors('rightAnswer')}">
+                    </p>
+                    <label for="answer2Edit">Ответ №2</label>
+                    <input
+                            id="answer2Edit"
+                            name="answer2Edit"
+                            placeholder="Введите ответ №2"
+                            th:field="*{answer2}"
+                            type="text"
+
+                    />
+                    <p th:errors = "*{answer2}"
+                       th:if="${#fields.hasErrors('answer2')}">
+                    </p>
+                    <label for="answer3Edit">Ответ №3</label>
+                    <input
+                            id="answer3Edit"
+                            name="answer3Edit"
+                            placeholder="Введите ответ №3"
+                            th:field="*{answer3}"
+                            type="text"
+
+                    />
+                    <p th:errors = "*{answer3}"
+                       th:if="${#fields.hasErrors('answer3')}">
+                    </p>
+                </div>
+                <div class="partF2">
+                    <label for="answer4Edit">Ответ №4</label>
+                    <input
+                            id="answer4Edit"
+                            name="answer4Edit"
+                            placeholder="Введите ответ №4"
+                            th:field="*{answer4}"
+                            type="text"
+
+                    />
+                    <p th:errors = "*{answer4}"
+                       th:if="${#fields.hasErrors('answer4')}">
+                    </p>
+                    <label for="pointEdit">Количество баллов</label>
+                    <input
+                            id="pointEdit"
+                            name="pointEdit"
+                            placeholder="Введите количество баллов"
+                            th:field="*{point}"
+                            type="number"
+                            min="0" step="0.1"
+                    />
+                    <p th:errors = "*{point}"
+                       th:if="${#fields.hasErrors('point')}">
+                    </p>
+                </div>
+            </div>
+            <p th:if="${emptyPositionQuestion}">
+                Пожалуйста, введите все данные!!!
+            </p>
+            <div>
+                <button type="submit">Отредактировать вопрос</button>
+            </div>
+        </form>
+        <a th:href="@{/hr/positionQuestions}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/hr/hrPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717;; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <div class="finding">
+        <form th:action="@{/hr/positionQuestions}"  class="form" method="get">
+            <div class="field">
+                <label for="levelPositionFind">Уровень позиции</label>
+                <select class="select" id="levelPositionFind"
+                        name="levelPositionFind"
+                        th:field="${levelPositionFind.idLevelPosition}"
+
+                >
+                    <div   th:each="levelPositionFinding:${levelPositions}">
+                        <option th:value="${levelPositionFinding.idLevelPosition}" th:text="${levelPositionFinding.level}"></option>
+                    </div>
+                </select>
+            </div>
+            <button type="submit" class="btn" >Поиск</button>
+        </form>
+        <a th:href="@{/hr/positionQuestions}" ><i class="fa fa-bars" style="color:black"></i></a>
+        <a th:href="@{/hr/addPositionQuestion}" ><i class="fa fa-plus" style="color:black"></i></a>
+    </div>
+    <div th:switch="${emptiness}">
+        <div th:case="'empty'">
+            <h3>Список технических вопросов пуст!</h3>
+            <img th:src="@{/photos/14-transformed.png}">
+        </div>
+        <div th:case="*">
+            <table class="table">
+                <thead>
+                <th>№</th>
+                <th>Вопрос</th>
+                <th>Позиция</th>
+                <th>Правильный ответ</th>
+                <th>Ответ №2</th>
+                <th>Ответ №3</th>
+                <th>Ответ №4</th>
+                <th>Балл</th>
+                <th>Редактирование</th>
+                <th>Удаление</th>
+                </thead>
+                <tr th:each="positionQuestion, iStat:${positionQuestions}" th:class="${iStat.even}? 'even_css_class':'odd_css_class'">
+                    <td th:text="${iStat.index+1}"></td>
+                    <td th:text="${positionQuestion.question}">
+                    <td th:text="${positionQuestion.getPosition().toString()}"></td>
+                    <td th:text="${positionQuestion.rightAnswer}">
+                    <td th:text="${positionQuestion.answer2}">
+                    <td th:text="${positionQuestion.answer3}">
+                    <td th:text="${positionQuestion.answer4}">
+                    <td th:text="${positionQuestion.point}"></td>
+                    <td><a th:href="@{/hr/editPositionQuestion/{id}(id=${positionQuestion.idPositionTestQuestion})}" ><i class="fa fa-pencil" style="color:black"></i></a></td>
+                    <td><a th:href="@{/hr/deletePositionQuestion/{id}(id=${positionQuestion.idPositionTestQuestion})}" ><i class="fa fa-trash" style="color:black"></i></a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a th:href="@{/hr/hrPage}">
+        <button>
+            Назад
+        </button>
+    </a>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

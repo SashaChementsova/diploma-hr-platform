@@ -1,0 +1,98 @@
+#td1{
+    min-width: 900px;
+    max-width: 900px;
+}
+#td2{
+    min-width: 560px;
+    max-width: 560px;
+}
+.field{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0 10px 0;
+}
+.container{
+    min-height: 700px;
+    color: #343434;
+}
+
+input{
+    width: 350px;
+    height: 25px;
+    border: none;
+    background: white;
+    color: rgb(84,84,84);
+    padding: 12px;
+    border-radius: 3px;
+    font-size: 14px;
+    margin: 0 5px 0 5px;
+}
+input:focus{
+    background-color: rgba(240, 255, 165, 0.9);
+}
+label{
+    margin-right: 5px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+
+h1,h3{
+    margin: 0 0 15px 0;
+    text-shadow: 3px 2px 2px rgba(225, 253, 91,0.9);
+}
+tr{
+    margin: 3px 0 3px 0;
+}
+a{
+    width: 140px;
+}
+button{
+    font-family: "Tahoma";
+    margin: 10px 10px 10px 10px;
+    width: 160px;
+    height: 42px;
+    border-radius:36px;
+    background-color:rgb(84,84,84);
+    border:1px solid rgba(225, 253, 91,0.9);
+    color: white;
+}
+.table{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+button:hover{
+    box-shadow:0 0 20px rgba(225, 253, 91,0.9);
+}
+.profile{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: start;
+    min-height: 460px;
+    min-width:700px;
+    border-radius:36px;
+    border:1px solid rgba(225, 253, 91,0.9);
+    background-color: #d7d7d7;
+    padding: 10px 0 10px 0;
+}
+.container a{
+    width: 150px;
+    margin: 0 10px 0 10px;
+}
+.buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+

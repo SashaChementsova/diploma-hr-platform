@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getEmployees.css">
+</head>
+<body>
+<div th:if="${delete}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/deleteEmployee/end/{id}(id=${position.idPositionName})}"
+                th:object="${employee}"
+                enctype="multipart/form-data"
+        >
+            <h1>Подтвердите удаление сотрудника</h1>
+            <input type="hidden" th:field="*{id}">
+            <div class="field">
+                <label for="email">Email</label>
+                <input
+                        id="email"
+                        name="email"
+                        placeholder="Введите email"
+                        th:field="*{email}"
+                        type="text"
+
+                />
+                <p th:errors = "*{email}"
+                   th:if="${#fields.hasErrors('email')}">
+                </p>
+                <p th:if="${emptyEmail}">
+                    Пожалуйста, введите Email!
+                </p>
+                <p th:if="${wrongEmail}">
+                    Пожалуйста, введите Email в указанном формате!
+                </p>
+                <p th:if="${notEqualEmail}">
+                    Не является Email данного сотрудника!
+                </p>
+                <p th:if="${interviewExist}">
+                    Данный сотрудник не может быть удален, так как закреплен за собеседованием!
+                </p>
+                <p th:if="${vacancyExist}">
+                    Данный сотрудник не может быть удален, так как закреплен за вакансией!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Добавить должность</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/employees/{id}(id=${position.idPositionName})}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/admin/adminPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <h1 th:text="${position.getName()}"></h1>
+    <div class="finding">
+        <form th:action="@{/admin/employees/{id}(id=${position.getIdPositionName()})}"  method="get">
+            <input type="text" th:field="${SNP.data}">
+            <button type="submit" class="btn" >Поиск</button>
+        </form>
+        <a th:href="@{/admin/employees/{id}(id=${position.getIdPositionName()})}" ><i class="fa fa-bars" style="color:black"></i></a>
+        <a th:href="@{/admin/addEmployee/start/{id}(id=${position.getIdPositionName()})}" ><i class="fa fa-plus " style="color:black"></i></a>
+    </div>
+    <div th:switch="${emptiness}">
+        <div th:case="'empty'">
+            <h3>Нет зарегистрированных сотрудников!</h3>
+            <img th:src="@{/photos/14-transformed.png}">
+        </div>
+        <div th:case="*">
+            <table class="table">
+                <thead>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Позиция</th>
+                    <th>Дата подписания контракта</th>
+                    <th>Дата окончания контракта</th>
+                    <th>Филиал компании</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </thead>
+                <tr th:each="employee:${employees}" >
+                    <td th:text="*{employee.getUserDetail().getSurname()}"></td>
+                    <td th:text="*{employee.getUserDetail().getName()}"></td>
+                    <td th:text="*{employee.getUserDetail().getPatronymic()}"></td>
+                    <td th:text="*{employee.getPosition().toString()}"></td>
+                    <td th:text="*{employee.getDateRecruitment()}"></td>
+                    <td th:text="*{employee.getDateContractEnd()}"></td>
+                    <td th:text="*{employee.getCityCompany().getNameCity()}"></td>
+                    <td><a th:href="@{/admin/editEmployee/{id}(id=${employee.idEmployee})}" ><i class="fa fa-pencil" style="color:black"></i></a></td>
+                    <td><a th:href="@{/admin/editEmployeePassword/{id}(id=${employee.idEmployee})}" ><i class="fa fa-lock" style="color:black"></i></a></td>
+                    <td><a th:href="@{/admin/deleteEmployee/{id}/{idEmployee}(id=${position.idPositionName},idEmployee=${employee.idEmployee})}" ><i class="fa fa-trash" style="color:black"></i></a></td>
+                    <td><a th:href="@{/admin/employeeOfPosition/{id}(id=${employee.idEmployee})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a th:href="@{/admin/positions/{id}(id=${position.getDepartment().getIdDepartment()})}">
+        <button>
+            Назад
+        </button>
+    </a>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

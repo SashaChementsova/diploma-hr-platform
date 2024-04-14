@@ -1,0 +1,22 @@
+[data-title] {
+    position: relative; /* Относительное позиционирование */
+    cursor: help; /* Меняем курсор на справочный */
+
+}
+[data-title]::after {
+    content: attr(data-title); /* Выводим текст из атрибута data-title */
+    position: absolute; /* Абсолютное позиционирование */
+    min-width:240px;
+
+    left: 50px; top: 1em; /* Положение подсказки */
+    opacity: 0; /* Скрываем подсказку, делая её прозрачной */
+    transition: 0.5s; /* Время появления подсказки */
+    pointer-events: none; /* Подсказка не реагирует на курсор */
+    background: #E1FD5B; /* Синий цвет фона */
+    color: #171717; /* Белый цвет текста */
+    font-size: xx-small;
+    padding: 0.5em; /* Поля вокруг текста */
+}
+[data-title]:hover::after {
+    opacity: 1; /* Показываем подсказку */
+}

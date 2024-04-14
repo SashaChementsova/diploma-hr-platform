@@ -1,0 +1,48 @@
+body {
+    margin: 0 0 0 0;
+    font-family: "Tahoma";
+    font-weight: bold;
+    min-width: 1470px;
+    max-width: 1470px;
+}
+.header{
+    font-size:large;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+    min-height: 80px;
+}
+.container{
+    text-align: center;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(185, 185, 185);
+    min-height: 618px;
+    min-width: 1470px;
+}
+.footer{
+    font-size: medium;
+    display: flex;
+    color: #171717;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+    min-height:50px;
+    min-width: 1460px;
+}
+
+#navbar {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#navbar li{
+    margin: 0 25px 0 25px;
+}

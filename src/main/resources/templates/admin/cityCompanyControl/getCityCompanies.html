@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getCityCompanies.css">
+</head>
+<body>
+<div th:if="${add}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/addCityCompany/end}"
+                th:object="${cityCompany}"
+                enctype="multipart/form-data"
+        >
+            <h1>Добавление филиала компании</h1>
+            <div class="field">
+                <label for="nameCity">Название города филиала компании</label>
+                <input
+                        id="nameCity"
+                        name="nameCity"
+                        placeholder="Введите название города филиала компании"
+                        th:field="*{nameCity}"
+                        type="text"
+
+                />
+                <p th:errors = "*{nameCity}"
+                   th:if="${#fields.hasErrors('nameCity')}">
+                </p>
+                <p th:if="${emptyCityCompany}">
+                    Пожалуйста, введите название города филиала компании!!!
+                </p>
+                <p th:if="${fail}">
+                    Такой город филиала компании уже существует!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Добавить филиал компании</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/cityCompanies}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div th:if="${mapCityCompany}">
+    <div class="modalframe">
+        <form>
+            <input name="mapCity" id="mapCity" type="hidden" th:value="${cityCompany.getNameCity()}">
+        </form>
+        <h1 th:text="${cityCompany.getNameCity()}"></h1>
+        <div id="map-test" class="map"></div>
+        <a th:href="@{/admin/cityCompanies}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+
+<div th:if="${delete}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/deleteCityCompany/end}"
+                th:object="${cityCompany}"
+                enctype="multipart/form-data"
+        >
+            <h1>Удаление филиала компании</h1>
+            <div class="field">
+                <input type="hidden" th:field="*{idCityCompany}">
+                <label for="nameCityDelete">Название города филиала компании</label>
+                <input
+                        id="nameCityDelete"
+                        name="nameCityDelete"
+                        placeholder="Подтвердите города филиала компании"
+                        th:field="*{nameCity}"
+                        type="text"
+
+                />
+                <p th:errors = "*{nameCity}"
+                   th:if="${#fields.hasErrors('nameDepartment')}">
+                </p>
+                <p th:if="${notEqual}">
+                    Название города филиала компании не совпадает с существующим!
+                </p>
+                <p th:if="${notEmptyEmployee}">
+                    В данном городе филиала компании еще числятся сотрудники!
+                </p>
+                <p th:if="${notEmptyVacancy}">
+                    Город филиала компании не может быть удален, так как существует вакансия в данном филиале компании!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Удалить филиал компании</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/cityCompanies}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+
+<div th:if="${edit}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:action="@{/admin/editCityCompany/end}"
+                th:object="${cityCompany}"
+                enctype="multipart/form-data"
+        >
+            <h1>Редактирование города филиала компании</h1>
+            <input type="hidden" th:field="*{idCityCompany}">
+            <div class="field">
+                <label for="nameCityEdit">Название города филиала компании</label>
+
+                <input
+                        id="nameCityEdit"
+                        name="nameCityEdit"
+                        placeholder="Введите название города филиала компании"
+                        th:field="*{nameCity}"
+                        type="text"
+
+                />
+                <p th:errors = "*{nameCity}"
+                   th:if="${#fields.hasErrors('nameCity')}">
+                </p>
+                <p th:if="${emptyCityCompany}">
+                    Пожалуйста, введите название города филиала компании!!!
+                </p>
+                <p th:if="${fail}">
+                    Такой город филиала компании уже существует!!!
+                </p>
+            </div>
+            <div>
+                <button type="submit">Отредактировать город филиала компании</button>
+            </div>
+        </form>
+        <a th:href="@{/admin/cityCompanies}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/admin/adminPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <a th:href="@{/admin/addCityCompany}" ><i class="fa fa-plus" style="color:black"></i></a>
+    <div th:switch="${emptiness}">
+        <div th:case="'empty'">
+            <h3>Нет зарегистрированных городов филиалов компаний!</h3>
+            <img th:src="@{/photos/14-transformed.png}">
+        </div>
+        <div th:case="*">
+            <table class="table">
+                <thead>
+                    <th>№</th>
+                    <th>Название города филиала компании</th>
+                    <th>Карта</th>
+                    <th>Редактирование</th>
+                    <th>Удаление</th>
+                </thead>
+                <tr th:each="cityCompany, iStat:${cityCompanies}" th:class="${iStat.even}? 'even_css_class':'odd_css_class'">
+                    <td th:text="${iStat.index+1}"></td>
+                    <td th:text="${cityCompany.nameCity}">
+                    </td>
+                    <td><a th:href="@{/admin/mapCityCompany/{id}(id=${cityCompany.idCityCompany})}" ><i class="fa fa-map-marker" style="color:black"></i></a></td>
+                    <td><a th:href="@{/admin/editCityCompany/{id}(id=${cityCompany.idCityCompany})}" ><i class="fa fa-pencil" style="color:black"></i></a></td>
+                    <td><a th:href="@{/admin/deleteCityCompany/{id}(id=${cityCompany.idCityCompany})}" ><i class="fa fa-trash" style="color:black"></i></a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a th:href="@{/admin/adminPage}">
+        <button>
+            Назад
+        </button>
+    </a>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+<script src="https://api-maps.yandex.ru/2.1/?apikey=ad73754a-eaed-4329-82f5-507450aa17f6&lang=ru_RU">
+</script>
+<script>
+    ymaps.ready(init);
+    function init(){
+        var myMap= new ymaps.Map('map-test', {
+            center: [53.9,27.5667],
+            zoom: 6
+        });
+        var address=document.getElementById("mapCity").value;
+        console.info(address);
+        var geocoder=ymaps.geocode(address);
+        geocoder.then(function (res)
+        {
+            var coordinates=res.geoObjects.get(0).geometry.getCoordinates();
+
+            let placemark = new ymaps.Placemark(coordinates, {}, {
+                iconLayout: 'default#image',
+                iconImageHref: '/photos/map-image-transformed.png',
+                iconImageSize: [40, 40],
+                iconImageOffset: [-19, -44]
+            });
+            myMap.controls.remove('geolocationControl'); // удаляем геолокацию
+            myMap.controls.remove('searchControl'); // удаляем поиск
+            myMap.controls.remove('trafficControl'); // удаляем контроль трафика
+            myMap.controls.remove('typeSelector'); // удаляем тип
+            myMap.controls.remove('fullscreenControl'); // удаляем кнопку перехода в полноэкранный режим
+            myMap.controls.remove('zoomControl'); // удаляем контрол зуммирования
+            myMap.controls.remove('rulerControl'); // удаляем контрол правил
+            myMap.geoObjects.add(placemark);
+        });
+    }
+
+</script>
+</body>
+</html>

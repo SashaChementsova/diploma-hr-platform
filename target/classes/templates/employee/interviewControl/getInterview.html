@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/getVacancy.css">
+</head>
+<body>
+<div th:if="${finishInterview}">
+    <div class="modalframe">
+        <form
+                method="post"
+                role="form"
+                th:object="${result}"
+                th:action="@{/employee/finishInterview/end/{idInterview}(idInterview=${interview.idInterview})}"
+                enctype="multipart/form-data"
+        >
+            <h1>Отзыв о кандидате после собеседования</h1>
+            <div class="field">
+                <label for="feedback">Отзыв</label>
+                <input
+                        id="feedback"
+                        name="feedback"
+                        placeholder="Напишите отзыы"
+                        th:field="*{feedback}"
+                        type="text"
+                />
+                <p th:errors = "*{feedback}" class="info"
+                   th:if="${#fields.hasErrors('feedback')}"></p>
+            </div>
+            <div class="field">
+                <label for="points">Оценка</label>
+                <input
+                        id="points"
+                        name="points"
+                        th:field="*{points}"
+                        type="number" min="0" max="10" step="1"
+                />
+                <p th:errors = "*{points}" class="info"
+                   th:if="${#fields.hasErrors('points')}"></p>
+            </div>
+            <div th:if="${empty}">
+                <div class="info">
+                    Пожалуйста, заполните все поля!
+                </div>
+            </div>
+            <div>
+                <button type="submit">Подтвердить</button>
+            </div>
+        </form>
+        <a th:href="@{/employee/interview/{idInterview}(idInterview=${interview.idInterview})}">
+            <button>
+                Отмена
+            </button>
+        </a>
+    </div>
+</div>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" >
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/hr/hrPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/logout}" style="color:#171717; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+
+<div class="container">
+    <table>
+        <tr><td colspan="2" th:text="'Позиция: '+${interview.trial.vacancy.getPosition().toString()}"></td></tr>
+        <tr>
+            <td>Дата</td>
+            <td colspan="2" th:text="${interview.getDateAndTime()}"></td>
+        </tr>
+        <tr>
+            <td>Ссылка на конференцию</td>
+            <td colspan="2">
+                <a th:href="@{${interview.getReference()}}" target="_blank">
+                    <button>Конференция</button>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td  th:text="'Кандидат: '+${candidate.userDetail.getSNP()}"></td>
+            <td><a th:href="@{/employee/candidate/{idInterview}(idInterview=${interview.idInterview})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+        </tr>
+        <tr>
+            <td  th:text="'HR-специалист: '+${hr.userDetail.getSNP()}"></td>
+            <td><a th:href="@{/employee/hr/{idInterview}(idInterview=${interview.idInterview})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+        </tr>
+
+    </table>
+    <div th:if="${today}">
+        <a th:href="@{/employee/finishInterview/{idInterview}(idInterview=${interview.idInterview})}">
+            <button>
+                Оставить отзыв после собеседования
+            </button>
+        </a>
+    </div>
+    <a th:href="@{/employee/interviews}">
+        <button>
+            Назад
+        </button>
+    </a>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

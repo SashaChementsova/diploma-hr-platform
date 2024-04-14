@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<div>
+    <table >
+        <tr>
+            <td>
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/admin/adminPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/admin/adminProfile}" style="color:#171717; text-decoration:none">ПРОФИЛЬ</a></li>
+                <li><a th:href="@{/logout}" style="color:white; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<form th:action="@{/admin/employees}"  method="get">
+    <input type="text" th:field="${SNP.data}">
+    <button type="submit" class="btn" >Поиск</button>
+</form>
+<a th:href="@{/admin/employees}" ><i class="fa fa-bars" style="color:black"></i></a>
+<div th:switch="${emptiness}">
+    <div th:case="'empty'">Нет зарегистрированных сотрудников!</div>
+    <div th:case="*">
+        <table>
+            <tr>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Отдел</th>
+                <th>Позиция</th>
+                <th>Дата подписания контракта</th>
+                <th>Дата окончания контракта</th>
+                <th>Адрес компании</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr th:each="employee:${employees}" >
+                <td th:text="*{employee.getUserDetail().getSurname()}"></td>
+                <td th:text="*{employee.getUserDetail().getName()}"></td>
+                <td th:text="*{employee.getUserDetail().getPatronymic()}"></td>
+                <td th:text="*{employee.getPosition().getPositionName().getDepartment().getNameDepartment()}"></td>
+                <td th:text="*{employee.getPosition().toString()}"></td>
+                <td th:text="*{employee.getDateRecruitment()}"></td>
+                <td th:text="*{employee.getDateContractEnd()}"></td>
+                <td th:text="*{employee.getCityCompany().getNameCity()}"></td>
+               <td><a th:href="@{/admin/employee/{id}(id=${employee.idEmployee})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<a th:href="@{/admin/adminPage}">
+    <button>
+        Назад
+    </button>
+</a>
+</body>
+</html>

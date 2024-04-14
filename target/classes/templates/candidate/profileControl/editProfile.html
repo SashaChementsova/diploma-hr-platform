@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/attribute.css">
+    <link rel="stylesheet" href="/styles/getCandidate.css">
+</head>
+<body>
+<div class="header">
+    <table >
+        <tr>
+            <td id="td1">
+                <img th:src="@{/photos/1.png}" >
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/candidate/candidatePage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/candidate/candidateProfile}" style="color:#171717; text-decoration:none">ПРОФИЛЬ</a></li>
+                <li><a th:href="@{/logout}" style="color:white; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div class="container" style="min-height: 850px;">
+        <div class="profile">
+            <form
+                    method="post"
+                    role="form"
+                    th:action="@{/candidate/candidateEditProfileEnd}"
+                    th:object="${user}"
+                    enctype="multipart/form-data"
+            >
+                <h1>Редактирование данных профиля</h1>
+                <input type="hidden" th:field="*{idUserDetails}">
+                <input type="hidden" th:field="*{password}">
+                <input type="hidden" th:field="${candidate.idCandidate}">
+                <input type="hidden" th:field="${educationEdit.idEducation}">
+                <div class="field">
+                    <p style="margin-right: 10px"><abbr data-title="Email в локальной части адреса допускает: числовые значения от 0 до 9, только строчные или прописные буквы латинского алфавита,
+символы подчеркивания “_”, дефис “-“ и точка “.” (точка не может быть в начале или в конце, а также несколько раз подряд, длина - не более 64 символов. Для доменной части то же самое, только не допускается наличие  “_”">Email</abbr></p>
+                    <input
+                            id="email"
+                            name="email"
+                            placeholder="Введите email"
+                            th:field="*{email}"
+                            type="text"
+
+                    />
+                </div>
+                <div th:if="${wrongEmail}">
+                    <div class="info">
+                        Пожалуйста, введите Email в указанном формате!
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="surname">Фамилия</label>
+                    <input
+                            id="surname"
+                            name="surname"
+                            placeholder="Введите фамилию"
+                            th:field="*{surname}"
+                            type="text"
+                            pattern="([А-Яёа-я -]+)|([\s]+)"
+                    />
+                    <p th:errors = "*{surname}" class="info"
+                       th:if="${#fields.hasErrors('surname')}"></p>
+                </div>
+
+                <div class="field">
+                    <label for="name">Имя</label>
+                    <input
+                            id="name"
+                            name="name"
+                            placeholder="Введите имя"
+                            th:field="*{name}"
+                            type="text"
+                            pattern="([А-Яёа-я -]+)|([\s]+)"
+                    />
+                    <p th:errors = "*{name}" class="info"
+                       th:if="${#fields.hasErrors('name')}"></p>
+                </div>
+                <div class="field">
+                    <label for="patronymic">Отчество</label>
+                    <input
+                            id="patronymic"
+                            name="patronymic"
+                            placeholder="Введите отчество"
+                            th:field="*{patronymic}"
+                            type="text"
+                            pattern="([А-Яёа-я -]+)|([\s]+)"
+                    />
+                    <p th:errors = "*{patronymic}" class="info"
+                       th:if="${#fields.hasErrors('patronymic')}"></p>
+                </div>
+                <div class="field">
+                    <label for="birthday">Дата рождения</label>
+                    <input
+                            style="color: rgb(86, 85, 85);font-size: 14px;"
+                            id="birthday"
+                            name="birthday"
+                            placeholder="Введите дату рождения"
+                            th:field="*{birthday}"
+                            type="date"
+                    />
+                    <p th:errors = "*{birthday}" class="info"
+                       th:if="${#fields.hasErrors('birthday')}"></p>
+                </div>
+                <div class="field">
+                    <label for="info">ИНФО</label>
+                    <input
+                            id="info"
+                            name="info"
+                            placeholder="Введите info"
+                            th:field="*{info}"
+                            type="text"
+                            pattern="([А-Яёа-я -]+)|([\s]+)"
+                    />
+                    <p th:errors = "*{info}" class="info"
+                       th:if="${#fields.hasErrors('info')}"></p>
+                </div>
+                <div class="field">
+                    <label for="phone">Номер телефона</label>
+                    <input
+                            id="phone"
+                            name="phone"
+                            th:field="*{phone}"
+                            type="tel"
+                            placeholder="+375_________"
+                            pattern="\+{1}375(([2]{1}([5]{1}|[9]{1}))|([3]{1}[3]{1})|([4]{1}[4]{1}))[0-9]{3}[0-9]{4}"
+                    />
+                    <p th:errors = "*{phone}" class="info"
+                       th:if="${#fields.hasErrors('phone')}"></p>
+                </div>
+                <div th:if="${existPhone}">
+                    <div class="info">
+                        Пользователь с таким номером телефона уже зарегистрирован!
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="experience">Опыт работы</label>
+                    <input
+                            id="experience"
+                            name="experience"
+                            placeholder="Введите опыт работы"
+                            th:field="${background.experience}"
+                            type="number"
+                            min="0"
+                            step="1"
+                    />
+                </div>
+                <div class="finding">
+                    <div class="field">
+                        <label for="languageName">Иностранный язык</label>
+                        <select class="select" id="languageName"
+                                name="languageName"
+                                th:field="${languageNameEdit.idLanguageName}"
+                        >
+                            <div th:each="languageName:${languageNames}">
+                                <option th:value="${languageName.idLanguageName}" th:text="${languageName.name}"></option>
+
+                            </div>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="levelLanguage">Уровень языка</label>
+                        <select class="select" id="levelLanguage"
+                                name="levelLanguage"
+                                th:field="${levelLanguageEdit.idLevelLanguage}"
+                        >
+                            <div th:each="levelLanguage:${levelLanguages}">
+                                <option th:value="${levelLanguage.idLevelLanguage}" th:text="${levelLanguage.level}"></option>
+
+                            </div>
+                        </select>
+                    </div>
+                </div>
+                <div class="finding">
+                    <label for="skills">Основные навыки</label>
+                    <div th:each="skillItem, itemStat : ${skillL.skillList}">
+                        <select id="skills" name="skills" th:field="${skillL.skillList[__${itemStat.index}__].idSkill}">
+                            <option th:value="${0}">-</option>
+                            <div th:each="skill: ${skills}">
+                                <option th:value="${skill.idSkill}" th:text="${skill.nameSkill}"></option>
+                            </div>
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="educationType">Тип образования</label>
+                    <select class="select" id="educationType"
+                            name="educationType"
+                            th:field="${educationTypeEdit.idEducationType}"
+                    >
+                        <div th:each="educationType:${educationTypes}">
+                            <option th:value="${educationType.idEducationType}" th:text="${educationType.typeOfEducation}"></option>
+
+                        </div>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="education">Учреждение образования</label>
+                    <input
+                            id="education"
+                            name="education"
+                            placeholder="Введите учреждение образования"
+                            th:field="${educationEdit.nameEducation}"
+                            type="text"
+                            pattern="([А-Яёа-я -]+)|([\s]+)"
+                            required
+                    />
+                </div>
+                <div class="field">
+                    <label for="educationYear">Год окончания</label>
+                    <input
+                            id="educationYear"
+                            name="educationYear"
+                            placeholder="Введите год окончания"
+                            th:field="${educationEdit.yearOfGraduation}"
+                            type="number"
+                            min="1945"
+                            step="1"
+                    />
+                </div>
+                <div th:if="${empty}">
+                    <div class="info">
+                        Пожалуйста, заполните все поля!
+                    </div>
+                </div>
+                <div th:if="${existingUser}">
+                    <div class="info">
+                        Пользователь с таким email/телефоном уже существует в системе.
+                    </div>
+                </div>
+                <div th:if="${wrongEmail}">
+                    <div class="info">
+                        Пожалуйста, введите Email в указанном формате!
+                    </div>
+                </div>
+                <div th:if="${age}">
+                    <div class="info">
+                        Сотрудниками могут быть только люди, достигшие 18 лет!
+                    </div>
+                </div>
+                <div>
+                    <button type="submit">Отредактировать</button>
+                </div>
+            </form>
+            <a style="margin-right: 40px" onclick="history.go(-1)">
+                <button >
+                    Назад
+                </button>
+            </a>
+        </div>
+</div>
+<div class="footer">
+    <p style="margin: 0 0 0 15px">Chementsova Sasha, 2023</p>
+</div>
+</body>
+</html>

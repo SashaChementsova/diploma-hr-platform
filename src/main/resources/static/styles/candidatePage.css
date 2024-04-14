@@ -1,0 +1,87 @@
+#td1{
+    min-width: 900px;
+    max-width: 900px;
+}
+#td2{
+    min-width: 560px;
+    max-width: 560px;
+}
+.field{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0 10px 0;
+}
+.container{
+    display: flex;
+    flex-direction: row;
+}
+.navigation-bar p{
+    color: rgb(84,84,84);
+    text-align: start;
+    font-size: x-large;
+    padding: 10px 10px 10px 30px;
+}
+.navigation-bar,.video{
+    min-height: 618px;
+}
+.navigation-bar{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width:610px;
+}
+.video{
+    min-width:860px;
+}
+button{
+    font-family: "Tahoma";
+    margin: 10px 0 20px 0;
+    width: 180px;
+    height: 50px;
+    border-radius:36px;
+    background-color: rgb(84,84,84);
+    border:1px solid rgb(84,84,84);
+    color:white;
+}
+button:hover{
+    box-shadow:0 0 20px rgba(225, 253, 91,0.9);
+}
+.video{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+a{
+    text-decoration:none;
+    color:rgb(84,84,84);
+    min-width: 500px;
+}
+.responsive-table li {
+    max-width: 500px;
+    min-height: 65px;
+    border-radius: 3px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+
+
+.responsive-table .table-row {
+    background-color: #ffffff;
+    box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+}
+.table-row{
+    margin: 5px 10px 5px 10px;
+}
+.responsive-table .col-1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+}

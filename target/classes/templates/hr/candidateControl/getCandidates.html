@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoftwareSeekers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div>
+    <table >
+        <tr>
+            <td>
+                <img th:src="@{/photos/1.png}" height="65px">
+            </td>
+            <td id="td2"><ul id="navbar">
+                <li><a th:href="@{/hr/hrPage}" style="color:#171717; text-decoration:none">ГЛАВНАЯ СТРАНИЦА</a></li>
+                <li><a th:href="@{/hr/hrProfile}" style="color:#171717; text-decoration:none">ПРОФИЛЬ</a></li>
+                <li><a th:href="@{/logout}" style="color:white; text-decoration:none">ВЫЙТИ</a></li>
+            </ul></td>
+        </tr>
+    </table>
+</div>
+<div th:switch="${emptiness}">
+    <div th:case="'empty'">Список кандидатов пуст!</div>
+    <div th:case="*">
+        <table>
+            <tr>
+                <th>№</th>
+                <th>ФИО</th>
+                <th>Почта</th>
+                <th>Активность кандидата</th>
+                <th>Профиль кандидата</th>
+            </tr>
+            <tr th:each="candidate, iStat:${candidates}" th:class="${iStat.even}? 'even_css_class':'odd_css_class'">
+                <td th:text="${iStat.index+1}"></td>
+                <td th:text="${candidate.getUserDetail().getSNP()}"></td>
+                <td th:text="${candidate.getUserDetail().getEmail()}"></td>
+                <div th:switch="${candidateService.checkActiveTrialOfCandidate(candidate)}">
+                    <td th:case="${true}">В состоянии прохождения собеседования</td>
+                    <td th:case="${false}">Не активен</td>
+                </div>
+                <td><a th:href="@{/hr/candidate/{id}(id=${candidate.idCandidate})}" ><i class="fa fa-angle-right" style="color:black"></i></a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<a onclick="history.go(-1)">
+    <button>
+        Назад
+    </button>
+</a>
+</body>
+</html>
